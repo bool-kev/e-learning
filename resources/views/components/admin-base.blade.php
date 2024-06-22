@@ -1,9 +1,19 @@
+@php
+    use App\Models\Faculte;
+@endphp
+@props(['facultes'=>Faculte::all()])
 @extends('base_bootstrap')
 @section('tite')
     Interface admin
 @endsection
 
 @section('style')
+    <style>
+        .select {
+            border-color: red;
+            color: black;
+        }
+    </style>
     <!-- Custom fonts for this template-->
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
@@ -48,8 +58,8 @@
                 <!-- Nav Item - Pages Collapse Menu -->
                 
                 @foreach ($facultes as $faculte)
-                    <li class="nav-item">
-                        <a class="nav-link @if ($loop->first)active @endif" href="#">
+                    <li class="nav-item"  @if ($loop->first)style='border-color:white;' @endif>
+                        <a class="nav-link " href="#">
                             <i class="fas fa-fw fa-cog"></i>
                             <span class="fs-5">{{Str::limit($faculte->libelle,15)}}</span>
                         </a>
@@ -345,9 +355,6 @@
 @endsection
 @section('script')
     <!-- Bootstrap core JavaScript-->
-    @vite(['resources/js/jquery.min.js'])
-
-    <!-- Core plugin JavaScript-->
     @vite(['resources/js/jquery.min.js'])
 
     <!-- Custom scripts for all pages-->

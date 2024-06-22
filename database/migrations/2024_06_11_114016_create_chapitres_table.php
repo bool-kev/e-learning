@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('titre');
             // $table->foreignIdFor(Matiere::class,'matiere_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('matiere_id')->constrained('matieres');
+            $table->foreignId('matiere_id')->constrained('matieres')->cascadeOnDelete();
             $table->timestamps();
         });
     }

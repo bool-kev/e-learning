@@ -22,19 +22,23 @@ class ChapitreController extends Controller
      */
     public function create(Matiere $matiere)
     {
-        return view("admin.chap.form",['facultes'=>Faculte::all(),'chap'=>new Chapitre()]);
+        return view("admin.chap.form",['facultes'=>Faculte::all(),'matiere'=>$matiere,'chap'=>new Chapitre()]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,Matiere $matiere)
     {
         $data=$request->validate([
-            'libelle'=>['alpha_num','required','min:2']
+            'titre'=>['string','required','min:2']
         ]);
-        $banco=Faculte::create($data);
-        return redirect()->route('admin.index')->with('success','');
+        $chap=Chapitre::create([
+            'titre'=> strtolower($data['titre']),
+            'matiere_id'=>$matiere->id
+        ]);
+        return back()->with('success','le chapitre a ete ajouter');
+        return redirect()->route('admin.index')->with('success','la chapitre a ete ajoute');
     }
 
     /**
@@ -48,24 +52,30 @@ class ChapitreController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Chapitre $chapitre)
     {
-        //
+        // dd($chapitre);
+        return view("admin.chap.form",['facultes'=>Faculte::all(),'chap'=>$chapitre]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Chapitre $chapitre)
     {
-        //
+        $data=$request->validate([
+            'titre'=>['required','min:2','string']
+        ]);
+        $chapitre->update($data);
+        return back()->with('success','chapitre modifier');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Chapitre $chapitre)
     {
-        //
+        $data=$chapitre->delete();
+        return redirect('/admin');
     }
 }

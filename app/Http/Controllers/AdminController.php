@@ -21,6 +21,6 @@ class AdminController extends Controller
     }
 
     function login(){
-        Auth::user()->eleve->niveau->matieres
+        
     }
 }

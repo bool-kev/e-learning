@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Chapitre extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'titre',
+        'matiere_id'
+    ] ;
+
+    public function cours(){
+        return $this->hasMany(Cours::class);
+    }
 }
