@@ -6,10 +6,30 @@ use App\Http\Requests\CoursFormRequest;
 use App\Models\Chapitre;
 use App\Models\Cours;
 use App\Models\Faculte;
+use App\Models\Fichier;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Type\Integer;
 
 class CoursController extends Controller
 {
+    private function extractData(CoursFormRequest $request)
+    {
+        $data=$request->validated();
+        if($fic=$request->validated('cover')) $data['cover']=$fic->store('Cover_Cours','public');
+        return $data;
+    }
+
+    private function storeFiles(array $files,Cours $cours)
+    {
+        foreach($files as $file){
+            $path=$file->store('Fichiers_Cours');
+            Fichier::create([
+                'path'=>$path,
+                'type'=>$file->getMimeType(),
+                'cours_id'=>$cours->id
+            ]);
+        }
+    }
     /**
      * Display a listing of the resource.
      */
@@ -32,17 +52,10 @@ class CoursController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CoursFormRequest $request)
+    public function store(CoursFormRequest $request,Chapitre $chapitre)
     {
-        $data=$request->validated();
-        if($data['cover']){
-            dump($data['cover']);
-        }
-        // $cours=Cours::create($data);
-        if($data['files'][0]){
-            dd($data['files']);
-        }
-        dd('far');
+        dd('store');
+
     }
 
     /**

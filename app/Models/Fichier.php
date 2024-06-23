@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Fichier extends Model
 {
     use HasFactory;
+    protected $fillable=[
+        'path',
+        'type',
+        'cours_id'
+    ];
 }

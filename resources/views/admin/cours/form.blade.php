@@ -4,7 +4,7 @@
         <x-session type="danger" key="error"></x-session>
         <x-session type="success" key="success"></x-session>
         <h1 class="diplay-3 my-4">{{ $cours->id ? 'Modifier le chapitre' : 'Enregistrer un nouvel chapitre' }}</h1>
-        <form action="" method="post" class="" id="form">
+        <form action="" method="post" class="" id="form" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-md-10 mt-5">
@@ -51,7 +51,11 @@
                             });
                             document.querySelector('#form')?.addEventListener('submit', (e) => {
                                 document.querySelector('#name').value = document.querySelector('.ql-editor').innerHTML;
-
+                                if(document.getElementById('files').files.length>5){
+                                    alert('vous ne pouvez pas choisir plus de 5 fichiers');
+                                    document.getElementById('files').value='';
+                                    e.preventDefault();
+                                }
                             });
                         </script>
                     </div>

@@ -25,16 +25,18 @@ class CoursFormRequest extends FormRequest
             'titre'=>['required','string','min:4'],
             'description'=>['string','nullable'],
             'content'=>['required','string'],
-            'cover'=>['nullable','image','max:3072'],
-            'files'=>['array','nullable'],
-            'files.*'=>['file','mimes:pdf,mp4,avi,webp','nullable']
+            'cover'=>['image','max:2048'],
+            'files'=>['array','max:5'],
+            'files.*'=>['file','mimes:pdf,mp4,avi,webp,png,jpg','max:10240']
         ];
     }
 
     public function messages()
     {
         return [
-            'files.*'=>"Tous les fichiers doivent etre de type PDF ou VIDEOS"
+            'files.*.max'=>'la taille doit de chaque fichier doit etre <=10Mo',
+            'files.*.mimes'=>'les fichiers doivent etre de type pdf,image ou video',
+            'files.*.file'=>'type fichier requis',
         ];
     }
 }
