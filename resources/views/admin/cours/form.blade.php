@@ -36,6 +36,9 @@
                         <div id="editor" class="mb-3">
                             {{-- content  --}}
                         </div>
+                        @error('content')
+                            <label for="" class="text-danger">{{ $message }}</label>
+                        @enderror
 
 
                         <!-- Include the Quill library -->
