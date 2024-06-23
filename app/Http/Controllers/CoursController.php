@@ -15,6 +15,7 @@ class CoursController extends Controller
     private function extractData(CoursFormRequest $request)
     {
         $data=$request->validated();
+        if ($data['description']) $data['description']=str_replace("<p><br></p>","",$data['description']);
         if($fic=$request->validated('cover')) $data['cover']=$fic->store('Cover_Cours','public');
         return $data;
     }
@@ -22,7 +23,7 @@ class CoursController extends Controller
     private function storeFiles(array $files,Cours $cours)
     {
         foreach($files as $file){
-            $path=$file->store('Fichiers_Cours');
+            $path=$file->store('Fichiers_Cours','public');
             Fichier::create([
                 'path'=>$path,
                 'type'=>$file->getMimeType(),
@@ -54,8 +55,11 @@ class CoursController extends Controller
      */
     public function store(CoursFormRequest $request,Chapitre $chapitre)
     {
-        dd('store');
-
+        $data=$this->extractData($request);
+        $data['chapitre_id']=$chapitre->id;
+        $cours=Cours::create($data);
+        if($data['files']??false) $this->storeFiles($data['files'],$cours);
+        return redirect('/admin');
     }
 
     /**
