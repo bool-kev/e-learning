@@ -8,6 +8,7 @@ use App\Models\Cours;
 use App\Models\Faculte;
 use App\Models\Fichier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class CoursController extends Controller
@@ -18,9 +19,8 @@ class CoursController extends Controller
         if ($data['content']) $data['content']=str_replace("<p><br></p>","",$data['content']);
         if (!( $request->validated('files') || $data['content'])) {
             session()->flash('error','Le champ content et le champs files ne peuvent pas etre tous les deux vides');
-            throw ValidationException::withMessages(['content'=>'']);
+            throw ValidationException::withMessages(['','']);
         }
-        dd($data);
         if($fic=$request->validated('cover')) $data['cover']=$fic->store('Cover_Cours','public');
         return $data;
     }
@@ -79,17 +79,21 @@ class CoursController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Cours $cours)
     {
-        //
+        return view("admin.cours.form",['cours'=>$cours]);
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CoursFormRequest $request, Cours $cours)
     {
-        //
+        $data=$this->extractData($request);
+        if($data['cover']??false and $cours->cover) Storage::disk('public')->delete($cours->cover);
+        $cours->update($data);
+        return redirect('/admin');
     }
 
     /**

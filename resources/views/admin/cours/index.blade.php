@@ -22,7 +22,7 @@
                     <td scope="row">{{ Str::limit($cour->description)??'Aucune description' }}</td>
                     <td scope="col">{{$cour->vues}}</td>
                     <td class="w-25">
-                        <a href=""><i
+                        <a href="{{route('admin.cours.edit',$cour)}}"><i
                                 class="bi bi-pencil-square btn btn-warning" data-bs-toggle="modal"
                                 data-bs-target="#ModalEdit{{$cour->id}}"></i></a>
                         <i class="bi bi-trash3-fill btn btn-danger" data-bs-toggle="modal"
@@ -44,7 +44,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-info"
                                         data-bs-dismiss="modal">annuler</button>
-                                    <form action="{{route('admin.chapitre.delete',$cour)}}" method="post">
+                                    <form action="{{route('admin.cours.delete',$cour)}}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-danger">Supprimer</button>

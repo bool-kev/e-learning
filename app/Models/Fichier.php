@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Fichier extends Model
 {
@@ -13,4 +14,7 @@ class Fichier extends Model
         'type',
         'cours_id'
     ];
+    public function getUrl(){
+        return Storage::url($this->path);
+    }
 }

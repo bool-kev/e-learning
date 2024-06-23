@@ -1,5 +1,5 @@
 <x-admin-base>
-    {{-- @dd($chap->id) --}}
+    {{-- @dd($cours->files->count()) --}}
     <div class="container">
         <x-session type="danger" key="error"></x-session>
         <x-session type="success" key="success"></x-session>
@@ -20,7 +20,7 @@
                     <div class="form-group mt-3">
                         <label for="description" class="form-label text-black">Description du cours</label>
                         <textarea class="form-control  @error('description')is-invalid  @enderror" id="description"
-                            placeholder="Description du cours" name="description">{{ old('description', $cours->titre) }}</textarea>
+                            placeholder="Description du cours" name="description">{{ old('description', $cours->description) }}</textarea>
                         @error('description')
                             <label for="description" class="text-danger">{{ $message }}</label>
                         @enderror
@@ -35,6 +35,7 @@
                         <textarea name="content" cols="30" rows="10" class="d-none" id="name"></textarea>
                         <div id="editor" class="mb-3">
                             {{-- content  --}}
+                            {!!$cours->content!!}
                         </div>
                         @error('content')
                             <label for="" class="text-danger">{{ $message }}</label>
@@ -67,9 +68,9 @@
                 </div>
                 <div class="col-md-2">
                     <label for="cover" class="form-label">Cover</label>
-                    @if (false)
+                    @if ($cours->cover)
                         <div class="card mb-2">
-                            <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/images/laravel-featured.png"
+                            <img src="{{$cours->getCover()}}"
                                 alt="" class="img-card mb-1"
                                 style="width: 100%;height: 100px; object-fit: cover">
                             <a href="" class="btn btn-danger w-100">Supprimer</a>
@@ -83,9 +84,9 @@
                     </div>
                     <hr>
                     <label for="files" class="form-label">Fichiers joint au cours</label>
-                    @if (false)
+                    @if ($cours->files->count())
                         <div class="fichier" style="overflow: auto;height: 200px;">
-                            @foreach ([1, 2, 3, 4] as $fichier)
+                            @foreach ($cours->files as $fichier)
                                 <div class="card mb-2">
                                     <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/images/laravel-featured.png"
                                         alt="" class="img-card mb-1"
