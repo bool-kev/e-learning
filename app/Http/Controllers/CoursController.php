@@ -8,14 +8,14 @@ use App\Models\Cours;
 use App\Models\Faculte;
 use App\Models\Fichier;
 use Illuminate\Http\Request;
-use Ramsey\Uuid\Type\Integer;
-
 class CoursController extends Controller
 {
     private function extractData(CoursFormRequest $request)
     {
         $data=$request->validated();
-        if ($data['description']) $data['description']=str_replace("<p><br></p>","",$data['description']);
+        if ($data['content']) $data['content']=str_replace("<p><br></p>","",$data['content']);
+        if (!( $request->validated('files') || $data['content'])) return back()->with('error','Le champ content et le champs files ne doivent pas eter tous les deux vides');
+        dd($data);
         if($fic=$request->validated('cover')) $data['cover']=$fic->store('Cover_Cours','public');
         return $data;
     }

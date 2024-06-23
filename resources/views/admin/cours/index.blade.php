@@ -8,6 +8,8 @@
             <tr>
                 <th scope="col">#id</th>
                 <th scope="col">intitule</th>
+                <th scope="col">description</th>
+                <th scope="col">Vues</th>
                 <th scope="col">action</th>
             </tr>
         </thead>
@@ -16,9 +18,11 @@
             @forelse ($chapitre->cours as $cour)
                 <tr>
                     <th scope="row">{{ $cour->id }}</th>
-                    <td class=""><a href="{{route('admin.cours.index',['slug'=>Str::slug($cour->titre),'chapitre'=>$chapitre])}}">{{ $chapitre->titre }}</a></td>
+                    <td class=""><a href="{{route('admin.cours.index',['slug'=>Str::slug($cour->titre),'chapitre'=>$chapitre])}}">{{ $cour->titre }}</a></td>
+                    <td scope="row">{{ Str::limit($cour->description)??'Aucune description' }}</td>
+                    <td scope="col">{{$cour->vues}}</td>
                     <td class="w-25">
-                        <a href="{{ route('admin.chapitre.edit', $m) }}"><i
+                        <a href=""><i
                                 class="bi bi-pencil-square btn btn-warning" data-bs-toggle="modal"
                                 data-bs-target="#ModalEdit{{$cour->id}}"></i></a>
                         <i class="bi bi-trash3-fill btn btn-danger" data-bs-toggle="modal"
