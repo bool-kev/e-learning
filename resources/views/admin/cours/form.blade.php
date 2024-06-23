@@ -3,6 +3,7 @@
     <div class="container">
         <x-session type="danger" key="error"></x-session>
         <x-session type="success" key="success"></x-session>
+        <div id="cover2"></div>
         <h1 class="diplay-3 my-4">{{ $cours->id ? 'Modifier le chapitre' : 'Enregistrer un nouvel chapitre' }}</h1>
         <form action="" method="post" class="" id="form" enctype="multipart/form-data">
             @csrf
@@ -35,7 +36,7 @@
                         <textarea name="content" cols="30" rows="10" class="d-none" id="name"></textarea>
                         <div id="editor" class="mb-3">
                             {{-- content  --}}
-                            {!!$cours->content!!}
+                            {!! $cours->content !!}
                         </div>
                         @error('content')
                             <label for="" class="text-danger">{{ $message }}</label>
@@ -55,9 +56,9 @@
                             });
                             document.querySelector('#form')?.addEventListener('submit', (e) => {
                                 document.querySelector('#name').value = document.querySelector('.ql-editor').innerHTML;
-                                if(document.getElementById('files').files.length>5){
+                                if (document.getElementById('files').files.length > 5) {
                                     alert('vous ne pouvez pas choisir plus de 5 fichiers');
-                                    document.getElementById('files').value='';
+                                    document.getElementById('files').value = '';
                                     e.preventDefault();
                                 }
                             });
@@ -69,11 +70,12 @@
                 <div class="col-md-2">
                     <label for="cover" class="form-label">Cover</label>
                     @if ($cours->cover)
-                        <div class="card mb-2">
-                            <img src="{{$cours->getCover()}}"
-                                alt="" class="img-card mb-1"
+                        <div class="card mb-2" id="card">
+                            <img src="{{ $cours->getCover() }}" alt="" class="img-card mb-1"
                                 style="width: 100%;height: 100px; object-fit: cover">
-                            <a href="" class="btn btn-danger w-100">Supprimer</a>
+                            <button class="btn btn-danger w-100"
+                                hx-post="{{ route('admin.cours.cover.delete', $cours) }}" hx-swap="outerHTML"
+                                hx-target="#cover2">Supprimer</button>
                         </div>
                     @endif
                     <div class="form-group my-2">
@@ -85,13 +87,14 @@
                     <hr>
                     <label for="files" class="form-label">Fichiers joint au cours</label>
                     @if ($cours->files->count())
-                        <div class="fichier" style="overflow: auto;height: 200px;">
+                        <div class="fichier" style="overflow: auto;height: 200px;" >
                             @foreach ($cours->files as $fichier)
-                                <div class="card mb-2">
-                                    <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/images/laravel-featured.png"
-                                        alt="" class="img-card mb-1"
+                                <div class="card mb-2" id="file-{{$fichier->id}}">
+                                    <img src="{{ $fichier->getPreview() }}" alt="" class="img-card mb-1"
                                         style="width: 100%;height: 100px; object-fit: cover">
-                                    <a href="" class="btn btn-danger w-100">Supprimer</a>
+                                        <button class="btn btn-danger w-100"
+                                        hx-post="{{ route('admin.cours.file.delete', $fichier) }}" hx-swap="outerHTML"
+                                        hx-target="#cover2">Supprimer</button>
                                 </div>
                             @endforeach
                         </div>
@@ -107,8 +110,7 @@
                     </div>
                 </div>
             </div>
-            
+            @vite('resources/backend/js/htmx.min.js')
         </form>
     </div>
 </x-admin-base>
- 

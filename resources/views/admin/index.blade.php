@@ -45,7 +45,7 @@
                 <tr>
                     <th scope="row">{{ $chapitre->id }}</th>
                     <td class=""><a href="{{route('admin.cours.index',['slug'=>Str::slug($chapitre->titre),'chapitre'=>$chapitre])}}">{{ $chapitre->titre }}</a></td>
-                    <td class="w-25">
+                    <td class="w-md-25">
                         <a href="{{ route('admin.chapitre.edit', $mat) }}"><i
                                 class="bi bi-pencil-square btn btn-warning" data-bs-toggle="modal"
                                 data-bs-target="#ModalEdit{{$chapitre->id}}"></i></a>

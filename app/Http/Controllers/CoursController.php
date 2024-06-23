@@ -92,6 +92,7 @@ class CoursController extends Controller
     {
         $data=$this->extractData($request);
         if($data['cover']??false and $cours->cover) Storage::disk('public')->delete($cours->cover);
+        if($data['files']??false) $this->storeFiles($data['files'],$cours);
         $cours->update($data);
         return redirect('/admin');
     }
@@ -99,8 +100,44 @@ class CoursController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Cours $cours)
     {
-        //
+        $cours->delete();
+        return back()->with('success','cours supprimer avec success');
+    }
+    public function removeCover(Cours $cours){
+        // dd($cours);
+        Storage::disk('public')->delete($cours->cover);
+        $cours->update(['cover'=>null]);
+        return <<<PHP
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert" id="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong >Le cover a ete supprimer avec sucess</strong>
+            </div>
+            <script>
+                setTimeout(() => {
+                    document.getElementById('alert')?.remove();
+                }, 5000);
+                document.getElementById('card')?.remove();
+            </script>
+        PHP;
+    }
+
+    public function removeFile(Fichier $file){
+        // dd($cours);
+        Storage::disk('public')->delete($file->path);
+        $file->delete();
+        return <<<PHP
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert" id="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong >Le fichier a ete supprimer avec sucess</strong>
+            </div>
+            <script>
+                setTimeout(() => {
+                    document.getElementById('alert')?.remove();
+                }, 5000);
+                document.getElementById('file-$file->id')?.remove();
+            </script>
+        PHP;
     }
 }

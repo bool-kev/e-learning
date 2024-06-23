@@ -20,8 +20,8 @@ class FaculteSeeder extends Seeder
             "Science Physique",
             "Allemand",
             "Informatique",
-            "Histoire Geaographie",
-            "Sience de la vie et de la Terre"
+            "Histoire Geographie",
+            "SVT"
         ];
 
         foreach($facultes as $faculte){

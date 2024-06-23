@@ -23,7 +23,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    @vite('resources/backend/css/sb-admin-2.min.css')
+    @vite('resources/backend/css/sb-admin-2.css')
 @endsection
 @section('content')
 

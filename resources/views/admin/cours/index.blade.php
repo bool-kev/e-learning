@@ -1,4 +1,5 @@
 <x-admin-base>
+    <x-session key="success"></x-session>
     <div class="label d-flex justify-content-around">
         <h3>Cours</h3>
         <a href="{{route('admin.cours.create',$chapitre)}}" class="btn btn-primary">Ajouter un cours</a>

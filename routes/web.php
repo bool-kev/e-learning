@@ -44,6 +44,8 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
         Route::get('edit/{cours}/','edit')->name('edit');
         Route::post('edit/{cours}/','update')->name('update');
         Route::delete('destroy/{cours}','destroy')->name('delete');
+        Route::post('removeCover/{cours}','removeCover')->name('cover.delete');
+        Route::post('removeFile/{file}','removeFile')->name('file.delete');
         Route::get('{slug}/{chapitre}/','index')->name('index');
     });
     Route::get('/{slug}-{faculte}/{slug2}-{niveau}','index')->name('index');
