@@ -60,7 +60,7 @@
                 </div>
                 <div class="col-md-2">
                     <label for="cover" class="form-label">Cover</label>
-                    @if (true)
+                    @if (false)
                         <div class="card mb-2">
                             <img src="https://picperf.io/https://laravelnews.s3.amazonaws.com/images/laravel-featured.png"
                                 alt="" class="img-card mb-1"
@@ -71,12 +71,12 @@
                     <div class="form-group my-2">
                         <input type="file" class="form-control" name="cover" id="cover">
                         @error('cover')
-                            <label for="vendu" class="text-danger">{{ $message }}</label>
+                            <label for="cover" class="text-danger">{{ $message }}</label>
                         @enderror
                     </div>
                     <hr>
                     <label for="files" class="form-label">Fichiers joint au cours</label>
-                    @if (true)
+                    @if (false)
                         <div class="fichier" style="overflow: auto;height: 200px;">
                             @foreach ([1, 2, 3, 4] as $fichier)
                                 <div class="card mb-2">
@@ -94,7 +94,7 @@
                             <label for="vendu" class="text-danger">{{ $message }}</label>
                         @enderror
                         @error('files.*')
-                            <label for="vendu" class="text-danger">{{ $message }}</label>
+                            <label for="files" class="text-danger">{{ $message }}</label>
                         @enderror
                     </div>
                 </div>

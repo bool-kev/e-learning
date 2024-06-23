@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CoursFormRequest;
 use App\Models\Chapitre;
 use App\Models\Cours;
 use App\Models\Faculte;
@@ -31,10 +32,17 @@ class CoursController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CoursFormRequest $request)
     {
-        dd('store');
-
+        $data=$request->validated();
+        if($data['cover']){
+            dump($data['cover']);
+        }
+        // $cours=Cours::create($data);
+        if($data['files'][0]){
+            dd($data['files']);
+        }
+        dd('far');
     }
 
     /**
