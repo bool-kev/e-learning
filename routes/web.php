@@ -28,9 +28,9 @@ Route::prefix('user/')->controller(EleveController::class)->name('user.')->group
 Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->group(function (){
     Route::get('/',function (){
         $faculte=Faculte::first();
-        $niveau=$faculte->classes->first();
-        return redirect("/admin/".Str::slug($faculte->libelle).'-'.$faculte->id.'/'.Str::slug($niveau->libelle).'-'.$niveau->id);
-    });
+        return redirect("/admin/{$faculte->id}");
+    })->name('root');
+    
     Route::prefix('chapitre/')->name('chapitre.')->controller(ChapitreController::class)->group(function (){
         Route::get('create/{matiere}','create')->name('create');
         Route::post('create/{matiere}','store')->name('store');
@@ -48,7 +48,8 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
         Route::post('removeFile/{file}','removeFile')->name('file.delete');
         Route::get('{slug}/{chapitre}/','index')->name('index');
     });
-    Route::get('/{slug}-{faculte}/{slug2}-{niveau}','index')->name('index');
+    Route::get('{faculte}/','indexFaculte')->name('faculte.index');
+    Route::get('{faculte}/{niveau}','index')->name('index');
 });
 Route::get('/',function(){
     $user=User::all()->last();

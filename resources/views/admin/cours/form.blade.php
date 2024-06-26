@@ -1,4 +1,4 @@
-<x-admin-base>
+<x-admin  :matiere="$matiere">
     {{-- @dd($cours->files->count()) --}}
     <div class="container">
         <x-session type="danger" key="error"></x-session>
@@ -113,4 +113,4 @@
             @vite('resources/backend/js/htmx.min.js')
         </form>
     </div>
-</x-admin-base>
+</x-admin>

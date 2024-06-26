@@ -55,7 +55,7 @@ class ChapitreController extends Controller
     public function edit(Chapitre $chapitre)
     {
         // dd($chapitre);
-        return view("admin.chap.form",['facultes'=>Faculte::all(),'chap'=>$chapitre]);
+        return view("admin.chap.form",['facultes'=>Faculte::all(),'chap'=>$chapitre,'matiere'=>$chapitre->matiere]);
     }
 
     /**

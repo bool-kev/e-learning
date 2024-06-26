@@ -17,7 +17,8 @@ class EleveFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id'=> $this->faker->unique()->numberBetween(1,10),
+            'niveau_id'=> $this->faker->unique()->numberBetween(1,10)
         ];
     }
 }

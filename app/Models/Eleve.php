@@ -17,4 +17,8 @@ class Eleve extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function niveau(){
+        return $this->belongsTo(Niveau::class);
+    }
 }

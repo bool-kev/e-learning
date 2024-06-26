@@ -1,4 +1,4 @@
-<x-admin-base>
+<x-admin :matiere="$chapitre->matiere">
     <x-session key="success"></x-session>
     <div class="label d-flex justify-content-around">
         <h3>Cours</h3>
@@ -59,4 +59,4 @@
             @endforelse
         </tbody>
     </table>
-</x-admin-base>
+</x-admin>

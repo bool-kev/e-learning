@@ -17,4 +17,8 @@ class Cours extends Model
     public function getCover(){
         return Storage::url($this->cover);
     }
+
+    public function chapitre(){
+        return $this->belongsTo(Chapitre::class);
+    }
 }

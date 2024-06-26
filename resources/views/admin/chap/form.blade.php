@@ -1,4 +1,4 @@
-<x-admin-base :facultes="$facultes">
+<x-admin  :matiere="$matiere">
     {{-- @dd($chap->id) --}}
     <div class="container">
         <x-session type="danger" key="error"></x-session>
@@ -17,4 +17,4 @@
             <a class="btn btn-info" href="/admin">retour</a>
         </form>
     </div>
-</x-admin-base>
+</x-admin>

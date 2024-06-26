@@ -7,17 +7,22 @@ use App\Models\Matiere;
 use App\Models\Niveau;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Http\Request;
+use Spatie\FlareClient\Http\Exceptions\NotFound;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AdminController extends Controller
 {
     use Authorizable;
-    function index(string $slug,Faculte $faculte,string $slug2,Niveau $niveau){
-        // dd(Faculte::find(1)->classes[0]->matieres);
-        // $facultes=Faculte::with('classes')->get();
-        // $cible=Matiere::where('niveau_id',1)->where('faculte_id',1)->first();
-        // dd($facultes[0]->matiere(1));
-
-        return view('admin.index',['facultes'=>Faculte::all(),'current'=>$faculte,'current_level'=>$niveau]);
+    function indexFaculte(Faculte $faculte){
+        $level=$faculte->classes()->first();
+        // $matiere=$faculte->matiere($level);
+        return to_route('admin.index',['faculte'=>$faculte,'niveau'=>$level??0]);
+        return view('admin.index',['facultes'=>Faculte::all(),'current'=>$faculte,'current_level'=>$faculte->classes->first()]);
+    }
+    function index(Faculte $faculte,Niveau $niveau){
+        $matiere=$faculte->matiere($niveau->id);
+        if (! $matiere) throw new NotFoundHttpException('Cette faculte n\'est pas enseigner la-bas');
+        return view('admin.index',['facultes'=>Faculte::all(),'matiere'=>$matiere]);
     }
 
     function login(){

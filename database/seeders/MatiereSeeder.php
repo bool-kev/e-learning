@@ -13,6 +13,10 @@ class MatiereSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+         foreach(Faculte::all() as $faculte)
+         {
+            $level=[random_int(1,12),random_int(1,12),random_int(1,12),random_int(1,12),random_int(1,12)];
+            $faculte->classes()->sync($level);
+         }
     }
 }

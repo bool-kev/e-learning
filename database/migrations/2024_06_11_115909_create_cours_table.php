@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('cours', function (Blueprint $table) {
             $table->id();
             $table->string('titre');
-            $table->fullText('content')->nullable();
+            $table->longText('content')->nullable();
             $table->integer('vues')->default(0);
             $table->foreignIdFor(Chapitre::class)->constrained()->cascadeOnDelete();
             $table->timestamps();

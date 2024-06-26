@@ -16,7 +16,7 @@ class Faculte extends Model
     }
 
    public function matiere(int $niveau){
-    return $this->classes()->wherePivot('niveau_id',$niveau)->first()->matieres;
+    return $this->classes()->wherePivot('niveau_id',$niveau)->first()?->matieres;
    }
 
     

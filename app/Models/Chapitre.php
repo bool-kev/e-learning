@@ -16,4 +16,8 @@ class Chapitre extends Model
     public function cours(){
         return $this->hasMany(Cours::class);
     }
+
+    public function matiere(){
+        return $this->belongsTo(Matiere::class);
+    }
 }

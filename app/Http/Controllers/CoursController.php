@@ -41,8 +41,6 @@ class CoursController extends Controller
      */
     public function index(string $slug,Chapitre $chapitre)
     {
-        // $cours=$chapitre->cours;
-        // // dd($cours);
         return view("admin.cours.index", compact('chapitre'));
     }
 
@@ -51,7 +49,7 @@ class CoursController extends Controller
      */
     public function create(Chapitre $chapitre)
     {
-        return view("admin.cours.form",['chapitre'=>$chapitre,'cours'=>new Cours()]);
+        return view("admin.cours.form",['chapitre'=>$chapitre,'cours'=>new Cours(),'matiere'=>$chapitre->matiere]);
         
     }
 
@@ -81,7 +79,7 @@ class CoursController extends Controller
      */
     public function edit(Cours $cours)
     {
-        return view("admin.cours.form",['cours'=>$cours]);
+        return view("admin.cours.form",['cours'=>$cours,'matiere'=>$cours->chapitre->matiere]);
         
     }
 

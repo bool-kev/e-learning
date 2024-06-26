@@ -32,10 +32,13 @@ class EleveController extends Controller
         return to_route('user.otp.form')->with('success','Inscription reussi!Verifier votre mail');
     }
     public function loginForm():View{
+        $user=User::find(1);
+        dd($user->eleve->niveau->matieres[0]->pivot->chapitres);
         return view('user.login');
     }
 
     public function login(Request $request){
+        
         $credentials=$request->validate([
             "email"=>['email','required'],
             "password"=>['string','required']
@@ -70,7 +73,7 @@ class EleveController extends Controller
         ]);
         $user=Auth::user();
 
-        if ( implode($otp)!==$user?->eleve?->token){
+        if ( implode($otp)!==$user->eleve->token){
             return back()->withInput($otp)->with('error','OTP invalidd');
         }elseif($user->eleve->updated_at->diffInMinutes(now())>1) {
             event(new EmailCheckEvent($user));

@@ -2,19 +2,18 @@
 
 namespace App\View\Components;
 
-use App\Models\Faculte;
 use App\Models\Matiere;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 
-class admin-base extends Component
+class admin extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(public Collection $Faculte,public Matiere $matiere)
+    public function __construct(public Collection $facultes,public Matiere $matiere)
     {
         //
     }
@@ -24,6 +23,6 @@ class admin-base extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.admin-base');
+        return view('components.admin');
     }
 }

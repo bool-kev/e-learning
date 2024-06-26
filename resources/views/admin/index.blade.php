@@ -1,17 +1,22 @@
-<x-admin-base :facultes="$facultes">
-    @php
-        $mat = $current->matiere($current_level->id);
-    @endphp
+{{-- @dd($matiere); --}}
+<x-admin-base :matiere="$matiere">
     <form action="" method="get">
         <div class="row justify-content-around">
             <div class="col-8">
                 <div class="form-group form-floating">
                     <select name="niveau" id="niveau" class="form-select">
-                        @foreach ($current->classes as $niveau)
-                            <option value="{{ $niveau->id }}">{{ $niveau->libelle }}</option>
+                        @foreach ($matiere->faculte->classes??[] as $niveau)
+                            <option value="{{ $niveau->id }}" @selected($matiere->niveau_id===$niveau->id)>{{ $niveau->libelle }}</option>
                         @endforeach
                     </select>
                     <label for="niveau" class="niveau">Niveau</label>
+                    <script>
+                        document.querySelector('#niveau').addEventListener('change',(e)=>{
+                            let url=`{{route('admin.index',['faculte'=>$matiere->faculte,'niveau'=>'LEVEL'])}} `;
+                            url=url.replace('LEVEL',e.target.selectedOptions[0].value);
+                            document.location=url;
+                        })
+                    </script>
                 </div>
             </div>
             {{-- <div class="col-5">
@@ -29,7 +34,7 @@
     <hr>
     <div class="label d-flex justify-content-around">
         <h3>Chapitres</h3>
-        <a href="{{ route('admin.chapitre.create', $mat) }}" class="btn btn-primary">Ajouter un chapitre</a>
+        <a href="{{ route('admin.chapitre.create', $matiere) }}" class="btn btn-primary">Ajouter un chapitre</a>
     </div>
     <table class="table table-striped table-hover mt-3">
         <thead>
@@ -41,12 +46,12 @@
         </thead>
         <tbody class="table-group-divider">
             {{-- @dd($current->matiere($current_level->id)->chapitres) --}}
-            @forelse ($current->matiere($current_level->id)->chapitres as $chapitre)
+            @forelse ($matiere->chapitres as $chapitre)
                 <tr>
                     <th scope="row">{{ $chapitre->id }}</th>
                     <td class=""><a href="{{route('admin.cours.index',['slug'=>Str::slug($chapitre->titre),'chapitre'=>$chapitre])}}">{{ $chapitre->titre }}</a></td>
-                    <td class="w-md-25">
-                        <a href="{{ route('admin.chapitre.edit', $mat) }}"><i
+                    <td class="w-25">
+                        <a href="{{ route('admin.chapitre.edit', $chapitre) }}"><i
                                 class="bi bi-pencil-square btn btn-warning" data-bs-toggle="modal"
                                 data-bs-target="#ModalEdit{{$chapitre->id}}"></i></a>
                         <i class="bi bi-trash3-fill btn btn-danger" data-bs-toggle="modal"
@@ -76,35 +81,14 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    
+                    </div> 
                 </tr>
             @empty
+            <tr><td colspan="3">Aucun chapitre enregistrer pour cette matiere</td></tr>
             @endforelse
         </tbody>
     </table>
 </x-admin-base>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-</button>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+
