@@ -13,6 +13,7 @@
             border-color: red;
             color: black;
         }
+        
     </style>
     <!-- Custom fonts for this template-->
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -61,7 +62,7 @@
                     <li class="nav-item">
                         <a class="nav-link " href="{{route('admin.faculte.index',$faculte)}}">
                             <i class="bi bi-book-half"></i>
-                            <span @class(['fs-5', 'active' => $faculte->libelle === $matiere->faculte->libelle ])>{{Str::limit($faculte->libelle,15)}}</span>
+                            <span @class(['fs-5', 'active' => $faculte->libelle === $matiere->faculte->libelle ]) style="width:10ch;">{{Str::limit($faculte->libelle,15)}}</span>
                         </a>
                     </li>
                 @endforeach

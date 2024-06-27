@@ -1,7 +1,7 @@
 @php
     use App\Models\Faculte;
 @endphp
-@props(['facultes'=>Faculte::all(),'matiere'])
+@props(['facultes' => Faculte::all(), 'matiere'])
 
 @extends('base_bootstrap')
 @section('tite')
@@ -10,8 +10,11 @@
 @section('style')
     <style>
         .active {
-            border-color: red;
+            border-color: rgb(72, 49, 197);
             color: black;
+        }
+        .rounded-pill.active{
+            background-color: rgb(87, 139, 182) !important;
         }
     </style>
     <!-- Custom fonts for this template-->
@@ -33,10 +36,11 @@
         <div id="wrapper">
 
             <!-- Sidebar -->
-            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion " id="accordionSidebar" style="width: 22rem !important;">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion " id="accordionSidebar"
+                style="width: 22rem !important;">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('admin.root')}}">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.root') }}">
                     <div class="sidebar-brand-text mx-3">Admin</div>
                 </a>
 
@@ -52,16 +56,19 @@
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
-                
+
 
 
                 <!-- Nav Item - Pages Collapse Menu -->
-                
+
                 @foreach ($facultes as $faculte)
-                    <li class="nav-item">
-                        <a class="nav-link " href="{{route('admin.faculte.index',$faculte)}}">
+                    <li class="nav-item" style="overflow: hidden;">
+                        <a class="nav-link " href="{{ route('admin.faculte.index', $faculte) }}">
                             <i class="bi bi-book-half"></i>
-                            <span @class(['fs-5', 'active' => $faculte->libelle === $matiere->faculte->libelle ])>{{Str::limit($faculte->libelle,15)}}</span>
+                            <span @class([
+                                'fs-6',
+                                'active' => $faculte->libelle === $matiere->faculte->libelle,
+                            ])>{{ Str::limit($faculte->libelle, 15) }}</span>
                         </a>
                     </li>
                 @endforeach
@@ -80,7 +87,7 @@
                 <div id="content">
 
                     <!-- Topbar -->
-                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <nav class="navbar navbar-expand navbar-light  topbar mb-4 static-top shadow" style="background-color: rgba(165, 142, 142,.25);" >
 
                         <!-- Sidebar Toggle (Topbar) -->
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -88,11 +95,12 @@
                         </button>
 
                         <!-- Topbar Search -->
+
                         <form
-                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            class="d-none d-sm-inline-block form-inline mr-3 ml-md-3 my-2 my-md-0 mw-100 navbar-search w-50">
                             <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                    aria-label="Search" aria-describedby="basic-addon2">
+                                <input type="text" class="form-control bg-light border-0 small"
+                                    placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="button">
                                         <i class="bi bi-search"></i>
@@ -100,7 +108,29 @@
                                 </div>
                             </div>
                         </form>
-                        
+
+                        <form class="form-inline mt-2 mx-3 w-50">
+                            <div class="input-group w-100">
+                                <div class="mb-3 form-floating">
+                                    <select name="niveau" id="niveau-md" class="form-select w-75">
+                                        @foreach ($matiere->faculte->classes ?? [] as $niveau)
+                                            <option value="{{ $niveau->id }}" @selected($matiere->niveau_id === $niveau->id)>
+                                                {{ $niveau->libelle }}</option>
+                                        @endforeach
+                                    </select>
+                                    <label for="niveau" class="niveau">Niveau</label>
+                                    <script>
+                                        document.querySelector('#niveau-md').addEventListener('change', (e) => {
+                                            let url = `{{ route('admin.index', ['faculte' => $matiere->faculte, 'niveau' => 'LEVEL']) }} `;
+                                            url = url.replace('LEVEL', e.target.selectedOptions[0].value);
+                                            document.location = url;
+                                        })
+                                    </script>
+                                </div>
+
+                            </div>
+                        </form>
+
 
 
                         <!-- Topbar Navbar -->
@@ -110,11 +140,11 @@
                             <li class="nav-item dropdown no-arrow d-sm-none">
                                 <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="bi bi-search"></i>
+                                    <i class="bi bi-search text-black"></i>
                                 </a>
                                 <!-- Dropdown - Messages -->
                                 <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                    aria-labelledby="searchDropdown">
+                                    aria-labelledby="searchDropdown" id="bi-search">
                                     <form class="form-inline mr-auto w-100 navbar-search">
                                         <div class="input-group">
                                             <input type="text" class="form-control bg-light border-0 small"
@@ -122,7 +152,7 @@
                                                 aria-describedby="basic-addon2">
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary" type="button">
-                                                    <i class="bi bi-search"></i>
+                                                    <i class="bi bi-search "></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -130,123 +160,16 @@
                                 </div>
                             </li>
 
-                            <!-- Nav Item - Alerts -->
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="bi bi-envelope-arrow-down-fill"></i>                                    <!-- Counter - Alerts -->
-                                    <span class="badge badge-danger badge-counter">3+</span>
-                                </a>
-                                <!-- Dropdown - Alerts -->
-                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                    aria-labelledby="alertsDropdown">
-                                    <h6 class="dropdown-header">
-                                        Alerts Center
-                                    </h6>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="mr-3">
-                                            <div class="icon-circle bg-primary">
-                                                <i class="bi bi-envelope-arrow-down-fill"></i>                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small text-gray-500">December 12, 2019</div>
-                                            <span class="font-weight-bold">A new monthly report is ready to
-                                                download!</span>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="mr-3">
-                                            <div class="icon-circle bg-success">
-                                                <i class="fas fa-donate text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small text-gray-500">December 7, 2019</div>
-                                            $290.29 has been deposited into your account!
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="mr-3">
-                                            <div class="icon-circle bg-warning">
-                                                <i class="fas fa-exclamation-triangle text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small text-gray-500">December 2, 2019</div>
-                                            Spending Alert: We've noticed unusually high spending for your account.
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item text-center small text-gray-500" href="#">Show All
-                                        Alerts</a>
-                                </div>
-                            </li>
+                            
 
                             <!-- Nav Item - Messages -->
                             <li class="nav-item dropdown no-arrow mx-1">
-                                <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-envelope fa-fw"></i>
+                                <a class="nav-link" href="#" id="messagesDropdown" role="button" title="gestion des utilisateur">
+                                    <i class="bi bi-people fs-3 text-black"></i>
                                     <!-- Counter - Messages -->
                                     <span class="badge badge-danger badge-counter">7</span>
                                 </a>
-                                <!-- Dropdown - Messages -->
-                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                    aria-labelledby="messagesDropdown">
-                                    <h6 class="dropdown-header">
-                                        Message Center
-                                    </h6>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            {{-- <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                                alt="..."> --}}
-                                            <div class="status-indicator bg-success"></div>
-                                        </div>
-                                        <div class="font-weight-bold">
-                                            <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                                problem I've been having.</div>
-                                            <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            {{-- <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                                alt="..."> --}}
-                                            <div class="status-indicator"></div>
-                                        </div>
-                                        <div>
-                                            <div class="text-truncate">I have the photos that you ordered last month, how
-                                                would you like them sent to you?</div>
-                                            <div class="small text-gray-500">Jae Chun · 1d</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            {{-- <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                                alt="..."> --}}
-                                            <div class="status-indicator bg-warning"></div>
-                                        </div>
-                                        <div>
-                                            <div class="text-truncate">Last month's report looks great, I am very happy
-                                                with
-                                                the progress so far, keep up the good work!</div>
-                                            <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            {{-- <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                                alt="..."> --}}
-                                            <div class="status-indicator bg-success"></div>
-                                        </div>
-                                        <div>
-                                            <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                                told me that people say this to all dogs, even if they aren't good...</div>
-                                            <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item text-center small text-gray-500" href="#">Read More
-                                        Messages</a>
-                                </div>
+
                             </li>
 
                             <div class="topbar-divider d-none d-sm-block"></div>
@@ -254,7 +177,7 @@
                             <!-- Nav Item - User Information -->
                             <li class="nav-item dropdown no-arrow">
                                 <div class="btn-group">
-                                    <a type="button" class="nav-link  dropdown-toggle me-5" data-bs-toggle="dropdown"
+                                    <a type="button" class="nav-link  dropdown-toggle me-2 text-black" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         Action
                                     </a>
@@ -348,5 +271,5 @@
     @vite(['resources/js/jquery.min.js'])
 
     <!-- Custom scripts for all pages-->
-    @vite(['resources/backend/js/sb-admin-2.min.js'])
+    @vite(['resources/backend/js/sb-admin-2.min.js', 'resources/backend/js/script.js'])
 @endsection
