@@ -310,6 +310,29 @@
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
+                        <form action="" method="get">
+                            <div class="row justify-content-around">
+                                <div class="col-8">
+                                    <div class="form-group form-floating">
+                                        <select name="niveau" id="niveau" class="form-select">
+                                            @foreach ($matiere->faculte->classes ?? [] as $niveau)
+                                                <option value="{{ $niveau->id }}" @selected($matiere->niveau_id === $niveau->id)>{{ $niveau->libelle }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <label for="niveau" class="niveau">Niveau</label>
+                                        <script>
+                                            document.querySelector('#niveau').addEventListener('change', (e) => {
+                                                let url = `{{ route('admin.index', ['faculte' => $matiere->faculte, 'niveau' => 'LEVEL']) }} `;
+                                                url = url.replace('LEVEL', e.target.selectedOptions[0].value);
+                                                document.location = url;
+                                            })
+                                        </script>
+                                    </div>
+                                </div>
+                    
+                            </div>
+                        </form>
                         {{ $slot }}
                     </div>
                     <!-- /.container-fluid -->
@@ -335,7 +358,7 @@
 
         <!-- Scroll to Top Button-->
         <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
+            <i class="bi bi-arrow-up"></i>
         </a>
 
         <!-- Logout Modal-->

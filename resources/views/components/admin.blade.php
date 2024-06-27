@@ -16,14 +16,17 @@
         .rounded-pill.active{
             background-color: rgb(87, 139, 182) !important;
         }
+        .rounded-pill.active span{
+            color: white !important;
+        }
     </style>
     <!-- Custom fonts for this template-->
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
-    <link
+    {{-- <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+        rel="stylesheet"> --}}
 
     <!-- Custom styles for this template-->
     @vite('resources/backend/css/sb-admin-2.css')
@@ -109,7 +112,7 @@
                             </div>
                         </form>
 
-                        <form class="form-inline mt-2 mx-3 w-50">
+                        <form class="form-inline mt-2 mx-3 w-50 d-none d-md-block">
                             <div class="input-group w-100">
                                 <div class="mb-3 form-floating">
                                     <select name="niveau" id="niveau-md" class="form-select w-75">
@@ -216,6 +219,29 @@
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
+                        <form action="" method="get" class="d-block d-md-none">
+                            <div class="row justify-content-around">
+                                <div class="col-8">
+                                    <div class="form-group form-floating">
+                                        <select name="niveau" id="niveau" class="form-select">
+                                            @foreach ($matiere->faculte->classes ?? [] as $niveau)
+                                                <option value="{{ $niveau->id }}" @selected($matiere->niveau_id === $niveau->id)>{{ $niveau->libelle }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <label for="niveau" class="niveau">Niveau</label>
+                                        <script>
+                                            document.querySelector('#niveau').addEventListener('change', (e) => {
+                                                let url = `{{ route('admin.index', ['faculte' => $matiere->faculte, 'niveau' => 'LEVEL']) }} `;
+                                                url = url.replace('LEVEL', e.target.selectedOptions[0].value);
+                                                document.location = url;
+                                            })
+                                        </script>
+                                    </div>
+                                </div>
+                    
+                            </div>
+                        </form>
                         {{ $slot }}
                     </div>
                     <!-- /.container-fluid -->
@@ -241,7 +267,7 @@
 
         <!-- Scroll to Top Button-->
         <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
+            <i class="bi bi-arrow-up"></i>
         </a>
 
         <!-- Logout Modal-->

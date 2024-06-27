@@ -21,4 +21,8 @@ class Matiere extends Pivot
     public function chapitres():HasMany{
         return $this->hasMany(Chapitre::class,'matiere_id');
     }
+
+    public function evaluations():HasMany{
+        return $this->hasMany(Evaluation::class,'matiere_id');
+    }
 }

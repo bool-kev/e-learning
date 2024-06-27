@@ -35,12 +35,16 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" >confirmation de suppression</h1>
+                                    <h3 class="modal-title fs-5" >confirmation de suppression</h3>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
+
                                 <div class="modal-body">
                                     <h1>Voulez-vous supprimer <span class="fw-bold fst-italic">{{$cour->titre}}</span> ?</h1>
+                                </div>
+                                <div class="alert alert-light d-block" role="alert">
+                                    <strong class="text-center text-danger fs-4"><i class="bi bi-exclamation-circle fs-4 text-danger"></i> Tous les fichiers associes seront supprimes</strong>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-info"

@@ -17,12 +17,12 @@ class AdminController extends Controller
         $level=$faculte->classes()->first();
         // $matiere=$faculte->matiere($level);
         return to_route('admin.index',['faculte'=>$faculte,'niveau'=>$level??0]);
-        return view('admin.index',['facultes'=>Faculte::all(),'current'=>$faculte,'current_level'=>$faculte->classes->first()]);
+        return view('admin.index',['current'=>$faculte,'current_level'=>$faculte->classes->first()]);
     }
     function index(Faculte $faculte,Niveau $niveau){
         $matiere=$faculte->matiere($niveau->id);
         if (! $matiere) throw new NotFoundHttpException('Cette faculte n\'est pas enseigner la-bas');
-        return view('admin.index',['facultes'=>Faculte::all(),'matiere'=>$matiere]);
+        return view('admin.index',['matiere'=>$matiere]);
     }
 
     function login(){

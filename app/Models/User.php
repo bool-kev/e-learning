@@ -52,8 +52,8 @@ class User extends Authenticatable
         return $this->hasOne(Eleve::class);
     }
 
-    public function is_admin():bool
+    public function is_staff():bool
     {
-        return $this->statut==="admin";
+        return $this->statut==="admin"||$this->statut==="enseignant";
     }
 }

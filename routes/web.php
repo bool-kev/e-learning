@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ChapitreController;
 use App\Http\Controllers\CoursController;
 use App\Http\Controllers\EleveController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\UserController;
 use App\Mail\OTPMail;
 use App\Models\Faculte;
@@ -47,6 +48,14 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
         Route::post('removeCover/{cours}','removeCover')->name('cover.delete');
         Route::post('removeFile/{file}','removeFile')->name('file.delete');
         Route::get('{slug}/{chapitre}/','index')->name('index');
+    });
+    Route::prefix('eval')->controller(EvaluationController::class)->name('eval.')->group(function(){
+        Route::get('eval','index')->name('index');
+        Route::get('create/{matiere}','create')->name('create');
+        Route::post('create/','store')->name('store');
+        Route::get('edit/','edit')->name('edit');
+        Route::post('edit/','update')->name('update');
+        Route::get('show/{eval}','show')->name('show');
     });
     Route::get('{faculte}/','indexFaculte')->name('faculte.index');
     Route::get('{faculte}/{niveau}','index')->name('index');

@@ -22,7 +22,7 @@ class ChapitreController extends Controller
      */
     public function create(Matiere $matiere)
     {
-        return view("admin.chap.form",['matiere'=>$matiere,'chap'=>new Chapitre()]);
+        return view("admin.chap.form",['matiere'=>$matiere::with('chapitres','evaluations'),'chap'=>new Chapitre()]);
     }
 
     /**
