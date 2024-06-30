@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\QuestionFormRequest;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -29,7 +30,13 @@ class QuestionController extends Controller
     public function store(QuestionFormRequest $request)
     {
         $data=$request->validated();
-        dd($data);
+        $question=new Question($data);
+        if(! $question->is_valid()) {
+            return back()->withErrors(["opts"=>'Au moins deux options pour les questions de type QCM']);
+        }
+        // dd($question);
+        $question->save();
+        return back()->with('success','La question a ete ajouter');
     }
 
     /**
@@ -59,8 +66,11 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        
+        $question=Question::findOrFail($request->validate(['question'=>'required|exists:questions,id']))->first();
+        $question->delete();
+        return back()->with('success','la question a ete supprimer');
     }
 }

@@ -23,13 +23,13 @@ class QuestionFormRequest extends FormRequest
     {
         $optRules=['string','nullable'];
         return [
-            'intitule'=>['required','string'],
+            'enonce'=>['required','string'],
             'opt1'=>$optRules,
             'opt2'=>$optRules,
             'opt3'=>$optRules,
             'opt4'=>$optRules,
-            'reponse'=>['required','string']
-
+            'reponse'=>['required','string'],
+            'evaluation_id'=>['required','exists:evaluations,id']
         ];
     }
 }

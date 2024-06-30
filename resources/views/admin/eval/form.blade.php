@@ -38,7 +38,6 @@
                             <label for="duree" class="text-danger">{{ $message }}</label>
                         @enderror
                     </div>
-
                     <div class="form-group col-6">
                         <label for="date" class="form-label text-black">date</label>
                         <input type="datetime-local" class="form-control py-4 fs-4 @error('date')is-invalid  @enderror"

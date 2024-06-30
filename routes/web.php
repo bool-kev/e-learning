@@ -5,6 +5,7 @@ use App\Http\Controllers\ChapitreController;
 use App\Http\Controllers\CoursController;
 use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\UserController;
 use App\Mail\OTPMail;
 use App\Models\Faculte;
@@ -57,10 +58,17 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
         Route::post('edit/','update')->name('update');
         Route::get('show/{eval}','show')->name('show');
     });
+    Route::prefix('question')->controller(QuestionController::class)->name('question.')->group(function(){
+        Route::post('create','store')->name('store');
+        Route::post('edit','update')->name('update');
+        Route::delete('destroy/','destroy')->name('delete');
+    });
     Route::get('{faculte}/','indexFaculte')->name('faculte.index');
     Route::get('{faculte}/{niveau}','index')->name('index');
 });
 Route::get('/',function(){
+    $faculte=Faculte::find(1);
+    dd($faculte->matiere(1));
     $user=User::all()->last();
     $matieres=Matiere::with(['faculte','niveau'])->get();
     $niveaux=Niveau::with('matieres')->get();
