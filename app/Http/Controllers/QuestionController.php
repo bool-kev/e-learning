@@ -50,17 +50,23 @@ class QuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Question $question)
     {
-        //
+        return view('admin.eval.edit',['question'=>$question]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(QuestionFormRequest $request, Question $question)
     {
-        //
+        $data=$request->validated();
+        $test=new Question($data);
+        if(! $test->is_valid()) {
+            return back()->withErrors(["opts"=>'Au moins deux options pour les questions de type QCM']);
+        }
+        $question->update($data);
+        return to_route('admin.eval.show',$question->evaluation)->with('success','La question a ete mis a jour');
     }
 
     /**

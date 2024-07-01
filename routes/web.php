@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ChapitreController;
 use App\Http\Controllers\CoursController;
 use App\Http\Controllers\EleveController;
+use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\UserController;
@@ -34,23 +35,23 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
     })->name('root');
     
     Route::prefix('chapitre/')->name('chapitre.')->controller(ChapitreController::class)->group(function (){
-        Route::get('create/{matiere}','create')->name('create');
-        Route::post('create/{matiere}','store')->name('store');
-        Route::get('edit/{chapitre}','edit')->name('edit');
-        Route::post('edit/{chapitre}','update')->name('update');
-        Route::delete('destroy/{chapitre}','destroy')->name('delete');
+        Route::get('create/{matiere}/','create')->name('create');
+        Route::post('create/{matiere}/','store')->name('store');
+        Route::get('edit/{chapitre}/','edit')->name('edit');
+        Route::post('edit/{chapitre}/','update')->name('update');
+        Route::delete('destroy/{chapitre}/','destroy')->name('delete');
     });
     Route::prefix('cours/')->controller(CoursController::class)->name('cours.')->group(function (){
         Route::get('create/{chapitre}/','create')->name('create');
         Route::post('create/{chapitre}/','store')->name('store');
         Route::get('edit/{cours}/','edit')->name('edit');
         Route::post('edit/{cours}/','update')->name('update');
-        Route::delete('destroy/{cours}','destroy')->name('delete');
-        Route::post('removeCover/{cours}','removeCover')->name('cover.delete');
-        Route::post('removeFile/{file}','removeFile')->name('file.delete');
+        Route::delete('destroy/{cours}/','destroy')->name('delete');
+        Route::post('removeCover/{cours}/','removeCover')->name('cover.delete');
+        Route::post('removeFile/{file}/','removeFile')->name('file.delete');
         Route::get('{slug}/{chapitre}/','index')->name('index');
     });
-    Route::prefix('eval')->controller(EvaluationController::class)->name('eval.')->group(function(){
+    Route::prefix('eval/')->controller(EvaluationController::class)->name('eval.')->group(function(){
         Route::get('eval','index')->name('index');
         Route::get('create/{matiere}','create')->name('create');
         Route::post('create/','store')->name('store');
@@ -58,10 +59,27 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
         Route::post('edit/','update')->name('update');
         Route::get('show/{eval}','show')->name('show');
     });
-    Route::prefix('question')->controller(QuestionController::class)->name('question.')->group(function(){
-        Route::post('create','store')->name('store');
-        Route::post('edit','update')->name('update');
-        Route::delete('destroy/','destroy')->name('delete');
+    Route::prefix('question/')->controller(QuestionController::class)->name('question.')->group(function(){
+        Route::post('create/','store')->name('store');
+        Route::get('edit/{question}/','edit')->name('edit');
+        Route::post('edit/{question}/','update')->name('update');
+        Route::delete('destroy/{question}/','destroy')->name('delete');
+    });
+    Route::prefix('enseignant/')->controller(EnseignantController::class)->name('enseignant.')->group(function(){
+        Route::get('list/','index')->name('index');
+        Route::get('enseignant/create','create')->name('create');
+        Route::post('enseignant/create','store')->name('store');
+        Route::get('enseignant/edit/{user}','edit')->name('edit');
+        Route::post('enseignant/edit/{user}','update')->name('update');
+        Route::delete('enseignant/delete/{user}','destroy')->name('delete');
+        Route::post('logout/','logout')->name('logout');
+
+    });
+    Route::prefix('eleve/')->controller(EleveController::class)->name('eleve.')->group(function(){
+        Route::get('list/','index')->name('index');
+        Route::get('enseignant/edit/{eleve}','edit')->name('edit');
+        Route::post('enseignant/edit/{eleve}','update')->name('update');
+        Route::delete('enseignant/delete/{eleve}','destroy')->name('delete');
     });
     Route::get('{faculte}/','indexFaculte')->name('faculte.index');
     Route::get('{faculte}/{niveau}','index')->name('index');

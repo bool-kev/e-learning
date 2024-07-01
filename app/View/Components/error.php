@@ -11,7 +11,7 @@ class error extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public string $key,public ?string $message)
+    public function __construct(public string $key)
     {
         //
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EnseignantController extends Controller
@@ -11,7 +12,8 @@ class EnseignantController extends Controller
      */
     public function index()
     {
-        //
+        $enseignants=User::where('statut','enseignant')->get();
+        return view('admin.users.teach.index',['enseignants'=>$enseignants]);
     }
 
     /**
@@ -19,7 +21,7 @@ class EnseignantController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.teach.form',['user'=>new User()]);
     }
 
     /**
@@ -27,7 +29,16 @@ class EnseignantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data=$request->validate([
+            'matricule'=>['required','alpha_num','min:4'],
+            'nom'=>['string','min:2'],
+            'prenom'=>['string','min:2'],
+            'email'=>['email','required','unique:users,id'],
+            'password'=>['required','confirmed','min:4']
+        ]);
+        $data['statut']='enseignant';
+        $user=User::create($data);
+        return to_route('admin.enseignant.index')->with('success','enseignant ajoute avec success');
     }
 
     /**
@@ -41,24 +52,37 @@ class EnseignantController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        return view('admin.users.teach.form',['user'=>$user]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $data=$request->validate([
+            'matricule'=>['required','alpha_num','min:4'],
+            'nom'=>['string','min:2'],
+            'prenom'=>['string','min:2'],
+            'email'=>['email','required','unique:users,id'],
+            'password'=>['required','confirmed','min:4']
+        ]);
+        $user->update($data);
+        return to_route('admin.enseignant.index')->with('success','enseignant mofifier avec success');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return to_route('admin.enseignant.index')->with('success','compte enseignant avec success');
+    }
+
+    public function logout(User $user){
+        dd('logout');
     }
 }

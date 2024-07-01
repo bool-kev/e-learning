@@ -1,7 +1,8 @@
 @php
     use App\Models\Faculte;
+    use App\Models\Matiere;
 @endphp
-@props(['facultes' => Faculte::all(), 'matiere'])
+@props(['facultes' => Faculte::all(), 'matiere'=>new Matiere()])
 
 @extends('base_bootstrap')
 @section('tite')
@@ -44,7 +45,7 @@
 
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.root') }}">
-                    <div class="sidebar-brand-text mx-3">Admin</div>
+                    <div class="sidebar-brand-text mx-3 d-inline">Admin</div>
                 </a>
 
                 <!-- Divider -->
@@ -70,7 +71,7 @@
                             <i class="bi bi-book-half"></i>
                             <span @class([
                                 'fs-6',
-                                'active' => $faculte->libelle === $matiere->faculte->libelle,
+                                'active' => $faculte->libelle === $matiere->faculte?->libelle,
                             ])>{{ Str::limit($faculte->libelle, 15) }}</span>
                         </a>
                     </li>
@@ -99,8 +100,8 @@
 
                         <!-- Topbar Search -->
 
-                        <form
-                            class="d-none d-sm-inline-block form-inline mr-3 ml-md-3 my-2 my-md-0 mw-100 navbar-search w-50">
+                        @if ($matiere->id)
+                        <form class="d-none d-sm-inline-block form-inline mr-3 ml-md-3 my-2 my-md-0 mw-100 navbar-search w-50">
                             <div class="input-group">
                                 <input type="text" class="form-control bg-light border-0 small"
                                     placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
@@ -133,6 +134,9 @@
 
                             </div>
                         </form>
+                        @else
+                            <a href="{{route('admin.root')}}" class="">Gestion des cours</a>
+                        @endif
 
 
 
@@ -163,16 +167,17 @@
                                 </div>
                             </li>
 
-                            
-
+                            {{-- @dd(request()->route()->getName()) --}}
                             <!-- Nav Item - Messages -->
                             <li class="nav-item dropdown no-arrow mx-1">
-                                <a class="nav-link" href="#" id="messagesDropdown" role="button" title="gestion des utilisateur">
+                                <a class="nav-link" href="#" id="userDropdown" role="button" title="gestion des utilisateur" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                                     <i class="bi bi-people fs-3 text-black"></i>
-                                    <!-- Counter - Messages -->
-                                    <span class="badge badge-danger badge-counter">7</span>
                                 </a>
-
+                                <ul class="dropdown-menu">
+                                    <a href="{{route('admin.eleve.index')}}" class="dropdown-item @if(str_starts_with(request()->route()->getName(),'admin.eleve'))active @endif">Eleves</a>
+                                    <a href="{{route('admin.enseignant.index')}}" class="dropdown-item @if(str_starts_with(request()->route()->getName(),'admin.enseignant'))active @endif">Enseignant</a>
+                                </ul>
                             </li>
 
                             <div class="topbar-divider d-none d-sm-block"></div>
@@ -198,11 +203,11 @@
                                             Activity Log
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-toggle="modal"
-                                            data-target="#logoutModal">
-                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Logout
-                                        </a>
+                                        <form class="dropdown-item" action="{{route('admin.enseignant.logout')}}" method="post">
+                                            @csrf
+                                            <i class="bi bi-box-arrow-left text-danger"></i>
+                                            <input type="submit" value="Logout">
+                                        </form>
                                     </ul>
                                 </div>
                                 <!-- Dropdown - User Information -->
@@ -221,24 +226,26 @@
                     <div class="container-fluid">
                         <form action="" method="get" class="d-block d-md-none">
                             <div class="row justify-content-around">
-                                <div class="col-8">
-                                    <div class="form-group form-floating">
-                                        <select name="niveau" id="niveau" class="form-select">
-                                            @foreach ($matiere->faculte->classes ?? [] as $niveau)
-                                                <option value="{{ $niveau->id }}" @selected($matiere->niveau_id === $niveau->id)>{{ $niveau->libelle }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <label for="niveau" class="niveau">Niveau</label>
-                                        <script>
-                                            document.querySelector('#niveau').addEventListener('change', (e) => {
-                                                let url = `{{ route('admin.index', ['faculte' => $matiere->faculte, 'niveau' => 'LEVEL']) }} `;
-                                                url = url.replace('LEVEL', e.target.selectedOptions[0].value);
-                                                document.location = url;
-                                            })
-                                        </script>
+                                @if ($matiere->id)
+                                    <div class="col-8">
+                                        <div class="form-group form-floating">
+                                            <select name="niveau" id="niveau" class="form-select">
+                                                @foreach ($matiere->faculte->classes ?? [] as $niveau)
+                                                    <option value="{{ $niveau->id }}" @selected($matiere->niveau_id === $niveau->id)>{{ $niveau->libelle }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <label for="niveau" class="niveau">Niveau</label>
+                                            <script>
+                                                document.querySelector('#niveau').addEventListener('change', (e) => {
+                                                    let url = `{{ route('admin.index', ['faculte' => $matiere->faculte, 'niveau' => 'LEVEL']) }} `;
+                                                    url = url.replace('LEVEL', e.target.selectedOptions[0].value);
+                                                    document.location = url;
+                                                })
+                                            </script>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                     
                             </div>
                         </form>

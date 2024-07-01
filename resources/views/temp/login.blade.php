@@ -21,7 +21,7 @@
                             <form action="#" class="signin-form">
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Username" required>
-									<x-error key="password"></x-error>
+									<x-error key="username"></x-error>
                                 </div>
                                 <div class="form-group">
                                     <input id="password-field" type="password" class="form-control " placeholder="Password"

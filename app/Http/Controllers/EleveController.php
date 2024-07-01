@@ -84,4 +84,38 @@ class EleveController extends Controller
         return to_route('user.login')->with('success','votre mail a ete confirme veuillez vous connecter');
         
     }
+
+    public function index()
+    {
+        $eleve=Eleve::with('user','niveau')->get();
+        return view('admin.users.eleve.index',['eleves'=>$eleve]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Eleve $eleve)
+    {
+        return view('user.register',['eleve'=>$eleve]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(EleveFormRequest $request, Eleve $eleve)
+    {
+        $data=$request->validated();
+        $eleve->user->update($data);
+        $eleve->update($data);
+        return to_route('admin.eleve.index')->with('success','eleve mofifier avec success');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Eleve $eleve)
+    {
+        $eleve->user->delete();
+        return to_route('admin.eleve.index')->with('success','compte eleve supprimer avec success');
+    }
 }

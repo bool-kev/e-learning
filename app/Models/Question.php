@@ -22,4 +22,9 @@ class Question extends Model
     public function is_qcm(){
         return array_filter(array($this->opt1, $this->opt2, $this->opt3, $this->opt4), function($v) { return $v; });
     }
+
+    public function evaluation()
+    {
+        return $this->belongsTo(Evaluation::class);
+    }
 }
