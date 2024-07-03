@@ -55,6 +55,6 @@ class User extends Authenticatable
 
     public function is_staff():bool
     {
-        return $this->statut==="admin"||$this->statut==="enseignant";
+        return boolval($this->statut==="admin"||$this->statut==="enseignant");
     }
 }

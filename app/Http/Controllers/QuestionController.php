@@ -29,13 +29,8 @@ class QuestionController extends Controller
      */
     public function store(QuestionFormRequest $request)
     {
-        $data=$request->validated();
-        $question=new Question($data);
-        if(! $question->is_valid()) {
-            return back()->withErrors(["opts"=>'Au moins deux options pour les questions de type QCM']);
-        }
-        // dd($question);
-        $question->save();
+        $data=$this->extract_data($request);
+        Question::create($data);
         return back()->with('success','La question a ete ajouter');
     }
 
@@ -60,13 +55,20 @@ class QuestionController extends Controller
      */
     public function update(QuestionFormRequest $request, Question $question)
     {
-        $data=$request->validated();
-        $test=new Question($data);
-        if(! $test->is_valid()) {
-            return back()->withErrors(["opts"=>'Au moins deux options pour les questions de type QCM']);
-        }
+        $data=$this->extract_data($request);
         $question->update($data);
         return to_route('admin.eval.show',$question->evaluation)->with('success','La question a ete mis a jour');
+    }
+
+    public function extract_data(QuestionFormRequest $request):array
+    {
+        $data=$request->validated();
+        $opts=$request->validated('options')??[];
+        if($opts)   array_push($opts,$data['reponse']);
+        foreach($opts as $key=>$opt){
+            $data["opt".$key+1]=$opt;
+        }
+        return $data;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CoursFormRequest extends FormRequest
@@ -11,7 +12,8 @@ class CoursFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $user=User::find(1);
+        return $user->is_staff();
     }
 
     /**

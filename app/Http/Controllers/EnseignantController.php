@@ -30,7 +30,7 @@ class EnseignantController extends Controller
     public function store(Request $request)
     {
         $data=$request->validate([
-            'matricule'=>['required','alpha_num','min:4'],
+            'matricule'=>['required','alpha_num','min:4','unique:users,matricule'],
             'nom'=>['string','min:2'],
             'prenom'=>['string','min:2'],
             'email'=>['email','required','unique:users,id'],
@@ -63,11 +63,10 @@ class EnseignantController extends Controller
     public function update(Request $request, User $user)
     {
         $data=$request->validate([
-            'matricule'=>['required','alpha_num','min:4'],
+            'matricule'=>['required','alpha_num','min:4',"unique:users,matricule,$user->id"],
             'nom'=>['string','min:2'],
             'prenom'=>['string','min:2'],
             'email'=>['email','required','unique:users,id'],
-            'password'=>['required','confirmed','min:4']
         ]);
         $user->update($data);
         return to_route('admin.enseignant.index')->with('success','enseignant mofifier avec success');

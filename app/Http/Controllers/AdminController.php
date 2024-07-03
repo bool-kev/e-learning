@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\QuestionFormRequest;
 use App\Models\Faculte;
 use App\Models\Matiere;
 use App\Models\Niveau;

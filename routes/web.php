@@ -67,19 +67,19 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
     });
     Route::prefix('enseignant/')->controller(EnseignantController::class)->name('enseignant.')->group(function(){
         Route::get('list/','index')->name('index');
-        Route::get('enseignant/create','create')->name('create');
-        Route::post('enseignant/create','store')->name('store');
-        Route::get('enseignant/edit/{user}','edit')->name('edit');
-        Route::post('enseignant/edit/{user}','update')->name('update');
-        Route::delete('enseignant/delete/{user}','destroy')->name('delete');
+        Route::get('create','create')->name('create');
+        Route::post('create','store')->name('store');
+        Route::get('edit/{user}','edit')->name('edit');
+        Route::post('edit/{user}','update')->name('update');
+        Route::delete('delete/{user}','destroy')->name('delete');
         Route::post('logout/','logout')->name('logout');
 
     });
     Route::prefix('eleve/')->controller(EleveController::class)->name('eleve.')->group(function(){
         Route::get('list/','index')->name('index');
-        Route::get('enseignant/edit/{eleve}','edit')->name('edit');
-        Route::post('enseignant/edit/{eleve}','update')->name('update');
-        Route::delete('enseignant/delete/{eleve}','destroy')->name('delete');
+        Route::get('edit/{eleve}','edit')->name('edit');
+        Route::post('edit/{eleve}','update')->name('update');
+        Route::delete('delete/{eleve}','destroy')->name('delete');
     });
     Route::get('{faculte}/','indexFaculte')->name('faculte.index');
     Route::get('{faculte}/{niveau}','index')->name('index');

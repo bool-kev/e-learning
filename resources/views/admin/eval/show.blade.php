@@ -4,11 +4,22 @@
     @php
         $questions = $eval->questions;
     @endphp
-    <div class="d-flex justify-content-around fs-4">
-        <p>Evaluation:{{ $eval->intitule }}</p>
-        <p>duree:{{ $eval->duree }}</p>
-        <p>date:{{ $eval->date }}</p>
-    </div>
+    <h3>informations de l'evaluation</h3>
+    <table class="table table-striped table-bordered">
+        <tbody>
+            <tr>
+                <th class="text-decoration-underline fst-italic">Matiere</th>
+                <th class="text-decoration-underline fst-italic">Intitule</th>
+                <th class="text-decoration-underline fst-italic">Duree</th>
+                <th class="text-decoration-underline fst-italic">Date</th>
+            </tr>
+            <tr>
+                <td>{{$eval->matiere->faculte->libelle}}</td>
+                <td>{{$eval->intitule}}</td>
+                <td>{{$eval->dureee}}</td>
+                <td>{{$eval->date}}</td>
+        </tbody>
+    </table>
     <hr>
     <div class="label d-flex justify-content-around">
         <h3 class="fw-bold">liste des questions</h3>
@@ -20,7 +31,7 @@
 
     </div>
     @if ($questions->count())
-        <table class="table table-striped table-responsive table-hover table-bordered mt-3">
+        <table class="table table-striped table-responsive-sm table-hover table-bordered">
             <thead>
                 <tr>
                     <th scope="col">#id</th>
@@ -39,7 +50,7 @@
                     <tr>
                         <th scope="row">{{ $question->id }}</th>
                         <td class="">{{ $question->enonce }}</td>
-                        @if ($question->is_qcm())
+                        @if ($question->options())
                             <td >{{ $question->opt1 }}</td>
                             <td >{{ $question->opt2 }}</td>
                             <td >{{ $question->opt3 }}</td>

@@ -28,6 +28,7 @@
                 <label for="email" class="text-danger">{{ $message }}</label>
             @enderror
         </div>
+        @if (! $user->id)
         <div class="form-group my-3">
             <input type="password" class="form-control p-3  @error('password')is-invalid  @enderror" id="floatingInputInvalid2" placeholder="Mot de passe"  name="password">
             @error('password')
@@ -40,8 +41,9 @@
                 <label for="floatingInputInvalid2" class="text-danger">{{ $message }}</label>
             @enderror
         </div>
+        @endif
         <input type="submit" value="{{$user->id?'modifier':'Enregistrer'}}" class="btn btn-primary ">
-        <a href="{{route('admin.enseignant.edit)}}" class="btn btn-info w-25">Retour</a>
+        <a href="{{route('admin.enseignant.edit',$user)}}" class="btn btn-info w-25">Retour</a>
        </div>
     </form>
 </x-admin>

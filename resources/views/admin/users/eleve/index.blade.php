@@ -4,7 +4,7 @@
         <h5 class="">Liste des eleves</h5>
         <a href="{{route('user.registerForm')}}" class="btn btn-primary">Ajouter un eleve</a>
     </div>
-    <table class="table table-hover table-striped table-responsive" style="overflow: scroll">
+    <table class="table table-hover table-striped table-responsive-sm" style="overflow: scroll">
         <thead>
             <th>#id</th>
             <th >Nom</th>

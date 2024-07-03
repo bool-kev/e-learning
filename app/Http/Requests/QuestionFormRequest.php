@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class QuestionFormRequest extends FormRequest
@@ -11,6 +12,8 @@ class QuestionFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        $user=User::find(14);
+        // dd($user->is_staff());
         return true;
     }
 
@@ -24,10 +27,8 @@ class QuestionFormRequest extends FormRequest
         $optRules=['string','nullable'];
         return [
             'enonce'=>['required','string'],
-            'opt1'=>$optRules,
-            'opt2'=>$optRules,
-            'opt3'=>$optRules,
-            'opt4'=>$optRules,
+            'options'=>['array','max:4'],
+            'options.*'=>['string','required'],
             'reponse'=>['required','string'],
             'evaluation_id'=>['required','exists:evaluations,id']
         ];

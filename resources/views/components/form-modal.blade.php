@@ -14,39 +14,6 @@
                 <label for="enonce" class="text-danger">{{ $message }}</label>
             @enderror
         </div>
-        <div class="form-group col-md-6">
-            <input type="text" class="form-control py-4 fs-4 text-black @error('opt1')is-invalid  @enderror"
-                id="opt1" placeholder="option 1" value="{{ old('opt1',$question->opt1) }}"
-                name="opt1">
-            @error('opt1')
-                <label for="opt1" class="text-danger">{{ $message }}</label>
-            @enderror
-        </div>
-        <div class="form-group col-md-6">
-            <input type="text" class="form-control py-4 fs-4 text-black @error('opt2')is-invalid  @enderror"
-                id="opt2" placeholder="option 2" value="{{ old('opt2',$question->opt2) }}"
-                name="opt2">
-            @error('opt2')
-                <label for="opt2" class="text-danger">{{ $message }}</label>
-            @enderror
-        </div>
-        
-        <div class="form-group col-md-6">
-            <input type="text" class="form-control py-4 fs-4 text-black @error('opt3')is-invalid  @enderror"
-                id="opt3" placeholder="option 3" value="{{ old('opt3', $question->opt3) }}"
-                name="opt3">
-            @error('opt3')
-                <label for="opt3" class="text-danger">{{ $message }}</label>
-            @enderror
-        </div>
-        <div class="form-group col-md-6">
-            <input type="text" class="form-control py-4 fs-4 text-black @error('opt4')is-invalid  @enderror"
-                id="opt4" placeholder="option 4" value="{{ old('opt4', $question->opt4) }}"
-                name="opt4">
-            @error('opt4')
-                <label for="opt4" class="text-danger">{{ $message }}</label>
-            @enderror
-        </div>
         <div class="form-group">
             <input type="text" class="form-control py-4 fs-4 text-black @error('reponse')is-invalid  @enderror"
                 id="reponse" placeholder="Reponse" value="{{ old('reponse', $question->reponse) }}"
@@ -55,5 +22,62 @@
                 <label for="reponse" class="text-danger">{{ $message }}</label>
             @enderror
         </div>
+        <div id="options-container" class="row">
+        <hr>
+        <p class="text-secondary">Options de reponses pour les QCM ( <strong>le reponse est la premiere option </strong>)</p>
+        @error('options')
+            <label for="#" class="text-danger">{{ $message }}</label>
+        @enderror
+        @error('options.*')
+            <label for="#" class="text-danger">{{ $message }}</label>
+        @enderror
+        </div>
     </div>
+    
+    <i class="bi bi-plus-circle-fill text-success mt-2 ms-2 fs-2 me-2" id="add-option-btn" style="cursor: pointer"></i>
+    <i class="bi bi-dash-circle text-danger mt-2 ms-2 fs-2" id="remove-option-btn" style="cursor: pointer"></i>
 </div>
+<script>
+    
+
+    document.addEventListener('DOMContentLoaded', () => {
+        function addOption(opt="") {
+        optionCount++;
+        const newOption = document.createElement('div');
+        newOption.classList.add(`option-field${optionCount}`,'col-md-6','mt-2');
+        newOption.innerHTML = `
+            <label for="option${optionCount}" class="form-label">Option ${optionCount}</label>
+            <input type="text" class="form-control text-black" id="option${optionCount}" name="options[]" value="${opt}"required>
+            {{--<button onclick="document.querySelector('.option-field${optionCount}').remove()" type="button">X</button>--}}
+        `;
+        optionsContainer.appendChild(newOption);
+    }
+        const optionsContainer = document.getElementById('options-container');
+        const addOptionBtn = document.getElementById('add-option-btn');
+        const removeOptionBtn = document.getElementById('remove-option-btn');
+        let optionCount = 0;
+        let options=@json(old('options')??$question->options());
+        console.log(options);
+        options.forEach(element => {
+            addOption(element);
+        });
+        if(optionCount>=3) addOptionBtn.classList.add('d-none');
+        else if(optionCount<=0) removeOptionBtn.classList.add('d-none');
+        addOptionBtn.addEventListener('click', () => {
+            if (optionCount < 3) {
+                addOption();
+                removeOptionBtn.classList.remove('d-none');
+            }
+            if(optionCount>=3) addOptionBtn.classList.add('d-none');
+        });
+        removeOptionBtn.addEventListener('click', () => {
+            if (optionCount > 0) {
+                const Option = document.querySelector(`.option-field${optionCount}`);
+                Option.remove();
+                optionCount--;
+                addOptionBtn.classList.remove('d-none');
+            }
+            if(optionCount<=0) removeOptionBtn.classList.add('d-none');
+        });
+    });
+</script>
