@@ -1,6 +1,8 @@
+@php
+    $matiere=$eval->matiere??$matiere;
+@endphp
 <x-admin :matiere="$matiere">
 
-    {{-- @dd($cours->files->count()) --}}
     <div class="container">
         @error('matiere_id')
             <div class="alert alert-danger" role="alert">

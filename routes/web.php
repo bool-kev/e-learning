@@ -55,8 +55,8 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
         Route::get('eval','index')->name('index');
         Route::get('create/{matiere}','create')->name('create');
         Route::post('create/','store')->name('store');
-        Route::get('edit/','edit')->name('edit');
-        Route::post('edit/','update')->name('update');
+        Route::get('edit/{eval}','edit')->name('edit');
+        Route::post('edit/{eval)','update')->name('update');
         Route::get('show/{eval}','show')->name('show');
         Route::delete('destroy/{eval}/','destroy')->name('delete');
 

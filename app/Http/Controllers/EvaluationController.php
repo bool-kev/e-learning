@@ -48,17 +48,20 @@ class EvaluationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Evaluation $eval)
     {
-        //
+        return view("admin.eval.form",['eval'=>$eval->load('matiere')]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(EvalFormRequest $request, Evaluation $eval)
     {
-        //
+        $data= $request->validated();
+        $eval->update($data);
+        return to_route('admin.eval.show', $eval);
     }
 
     /**
