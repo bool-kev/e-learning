@@ -43,7 +43,7 @@
         </div>
         @endif
         <input type="submit" value="{{$user->id?'modifier':'Enregistrer'}}" class="btn btn-primary ">
-        <a href="{{route('admin.enseignant.edit',$user)}}" class="btn btn-info w-25">Retour</a>
+        <a href="{{route('admin.enseignant.index')}}" class="btn btn-info w-25">Retour</a>
        </div>
     </form>
 </x-admin>

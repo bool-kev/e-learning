@@ -135,7 +135,7 @@
                                 <td scope="row">{{ $eval->date }}</td>
                                 <td class="pe-0 w-25">
                                     <div class="float-end">
-                                        <a href="{{ route('admin.chapitre.edit', $chapitre) }}"><i
+                                        <a href="{{ route('admin.eval.edit', $eval) }}"><i
                                                 class="bi bi-pencil-square btn btn-warning" data-bs-toggle="modal"
                                                 data-bs-target="#ModalEdit{{ $eval->id }}"></i></a>
                                         <i class="bi bi-trash3-fill btn btn-danger" data-bs-toggle="modal"
@@ -164,7 +164,7 @@
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-info"
                                                     data-bs-dismiss="modal">annuler</button>
-                                                <form action="{{ route('admin.chapitre.delete', $chapitre) }}"
+                                                <form action="{{ route('admin.eval.delete', $eval) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')

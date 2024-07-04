@@ -22,7 +22,7 @@ class ChapitreController extends Controller
      */
     public function create(Matiere $matiere)
     {
-        return view("admin.chap.form",['matiere'=>$matiere::with('chapitres','evaluations'),'chap'=>new Chapitre()]);
+        return view("admin.chap.form",['matiere'=>$matiere->load('chapitres','evaluations'),'chap'=>new Chapitre()]);
     }
 
     /**
@@ -54,8 +54,8 @@ class ChapitreController extends Controller
      */
     public function edit(Chapitre $chapitre)
     {
-        // dd($chapitre);
-        return view("admin.chap.form",['facultes'=>Faculte::all(),'chap'=>$chapitre,'matiere'=>$chapitre->matiere]);
+
+        return view("admin.chap.form",['facultes'=>Faculte::all(),'chap'=>$chapitre->load('matiere'),]);
     }
 
     /**

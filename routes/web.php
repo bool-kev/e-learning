@@ -58,6 +58,8 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
         Route::get('edit/','edit')->name('edit');
         Route::post('edit/','update')->name('update');
         Route::get('show/{eval}','show')->name('show');
+        Route::delete('destroy/{eval}/','destroy')->name('delete');
+
     });
     Route::prefix('question/')->controller(QuestionController::class)->name('question.')->group(function(){
         Route::post('create/','store')->name('store');

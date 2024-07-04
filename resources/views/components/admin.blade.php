@@ -3,7 +3,6 @@
     use App\Models\Matiere;
 @endphp
 @props(['facultes' => Faculte::all(), 'matiere'=>new Matiere()])
-
 @extends('base_bootstrap')
 @section('tite')
     Interface admin

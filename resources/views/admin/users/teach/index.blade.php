@@ -4,7 +4,7 @@
         <h5 class="">Liste des enseignant</h5>
         <a href="{{route('admin.enseignant.create')}}" class="btn btn-primary">enregistrer un enseignant</a>
     </div>
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-striped table-responsive-sm">
         <thead>
             <th>#id</th>
             <th>Nom</th>
