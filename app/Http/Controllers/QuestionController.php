@@ -64,7 +64,7 @@ class QuestionController extends Controller
     {
         $data=$request->validated();
         $opts=$request->validated('options')??[];
-        if($opts)   array_push($opts,$data['reponse']);
+        for($i=1;$i<=3;$i++) $data["opt".$i]=null;
         foreach($opts as $key=>$opt){
             $data["opt".$key+1]=$opt;
         }

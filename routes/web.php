@@ -9,6 +9,7 @@ use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\UserController;
 use App\Mail\OTPMail;
+use App\Models\Cours;
 use App\Models\Faculte;
 use App\Models\Matiere;
 use App\Models\Niveau;
@@ -96,4 +97,8 @@ Route::get('/',function(){
     Mail::to($user->email)->send(new OTPMail($user));
     dd($niveaux[0]->matieres);
     
+});
+Route::get('cours/{cours}',function(Cours $cours){
+    $cours->load('files');
+    return view('cours',['cours'=>$cours]);
 });

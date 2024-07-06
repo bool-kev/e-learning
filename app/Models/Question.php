@@ -22,7 +22,7 @@ class Question extends Model
 
     public function options()
     {
-        $opts=array_filter(array($this->opt1, $this->opt2, $this->opt3, $this->opt4), function($v) { return $v; });
+        $opts=array_filter(array($this->opt1, $this->opt2, $this->opt3), function($v) { return $v; });
         // dd($opts);
         return array_values($opts);
     }

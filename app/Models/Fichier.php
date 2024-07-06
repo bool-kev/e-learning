@@ -18,6 +18,10 @@ class Fichier extends Model
         return Storage::url($this->path);
     }
 
+    public function getPublicUrl(){
+        return Storage::disk('public')->url($this->path);
+    }
+
     public function getPreview()
     {
         if (in_array($this->type, ['image/jpg','image/png'])) {

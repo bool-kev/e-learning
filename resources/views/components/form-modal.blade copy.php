@@ -39,14 +39,7 @@
                 <label for="opt3" class="text-danger">{{ $message }}</label>
             @enderror
         </div>
-        <div class="form-group col-md-6">
-            <input type="text" class="form-control py-4 fs-4 text-black @error('opt4')is-invalid  @enderror"
-                id="opt4" placeholder="option 4" value="{{ old('opt4', $question->opt4) }}"
-                name="opt4">
-            @error('opt4')
-                <label for="opt4" class="text-danger">{{ $message }}</label>
-            @enderror
-        </div>
+        
         <div class="form-group">
             <input type="text" class="form-control py-4 fs-4 text-black @error('reponse')is-invalid  @enderror"
                 id="reponse" placeholder="Reponse" value="{{ old('reponse', $question->reponse) }}"

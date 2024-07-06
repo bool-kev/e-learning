@@ -18,7 +18,6 @@ class AdminController extends Controller
         $level=$faculte->classes()->first();
         // $matiere=$faculte->matiere($level);
         return to_route('admin.index',['faculte'=>$faculte,'niveau'=>$level??0]);
-        return view('admin.index',['current'=>$faculte,'current_level'=>$faculte->classes->first()]);
     }
     function index(Faculte $faculte,Niveau $niveau){
         $matiere=$faculte->matiere($niveau->id);

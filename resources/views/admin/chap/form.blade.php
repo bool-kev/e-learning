@@ -1,4 +1,4 @@
-<x-admin  :matiere="$matiere">
+<x-admin  :matiere="$chap->matiere">
     {{-- @dd($chap->id) --}}
     <div class="container">
         <x-session type="danger" key="error"></x-session>

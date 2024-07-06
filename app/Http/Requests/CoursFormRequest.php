@@ -13,7 +13,7 @@ class CoursFormRequest extends FormRequest
     public function authorize(): bool
     {
         $user=User::find(1);
-        return $user->is_staff();
+        return true;
     }
 
     /**

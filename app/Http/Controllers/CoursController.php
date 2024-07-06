@@ -41,6 +41,7 @@ class CoursController extends Controller
      */
     public function index(string $slug,Chapitre $chapitre)
     {
+        // dd($slug);
         return view("admin.cours.index", compact('chapitre'));
     }
 
@@ -49,6 +50,7 @@ class CoursController extends Controller
      */
     public function create(Chapitre $chapitre)
     {
+        $chapitre->load('matiere');
         return view("admin.cours.form",['chapitre'=>$chapitre,'cours'=>new Cours(),'matiere'=>$chapitre->matiere]);
         
     }
@@ -62,7 +64,7 @@ class CoursController extends Controller
         $data['chapitre_id']=$chapitre->id;
         $cours=Cours::create($data);
         if($data['files']??false) $this->storeFiles($data['files'],$cours);
-        return redirect('/admin');
+        return back()->with('success','cours ajoute avec success');
     }
 
     /**
@@ -79,6 +81,7 @@ class CoursController extends Controller
      */
     public function edit(Cours $cours)
     {
+        $cours->load('chapitre.matiere');
         return view("admin.cours.form",['cours'=>$cours,'matiere'=>$cours->chapitre->matiere]);
         
     }
@@ -92,7 +95,7 @@ class CoursController extends Controller
         if($data['cover']??false and $cours->cover) Storage::disk('public')->delete($cours->cover);
         if($data['files']??false) $this->storeFiles($data['files'],$cours);
         $cours->update($data);
-        return redirect('/admin');
+        return back()->with('success','Le cours a ete bien mis a jour');
     }
 
     /**
@@ -123,8 +126,8 @@ class CoursController extends Controller
 
     public function removeFile(Fichier $file){
         // dd($cours);
-        Storage::disk('public')->delete($file->path);
         $file->delete();
+        Storage::disk('public')->delete($file->path);
         return <<<PHP
             <div class="alert alert-success alert-dismissible fade show mt-3" role="alert" id="alert">
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

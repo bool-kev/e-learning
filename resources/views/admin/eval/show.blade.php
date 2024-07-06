@@ -39,7 +39,6 @@
                     <th scope="col" >opt1</th>
                     <th scope="col" >opt2</th>
                     <th scope="col" >opt3</th>
-                    <th scope="col" >opt4</th>
                     <th scope="col">reponse</th>
                     <th scope="col" class="text-end">action</th>
                 </tr>
@@ -54,9 +53,8 @@
                             <td >{{ $question->opt1 }}</td>
                             <td >{{ $question->opt2 }}</td>
                             <td >{{ $question->opt3 }}</td>
-                            <td >{{ $question->opt4 }}</td>
                         @else
-                            <td colspan="4" class="text-center fw-bold fst-italice">pas de type
+                            <td colspan="3" class="text-center fw-bold fst-italice">pas de type
                                 QCM</td>
                         @endif
                         <td class="">{{ $question->reponse }}</td>

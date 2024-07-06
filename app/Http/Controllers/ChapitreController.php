@@ -33,12 +33,11 @@ class ChapitreController extends Controller
         $data=$request->validate([
             'titre'=>['string','required','min:2']
         ]);
-        $chap=Chapitre::create([
+        Chapitre::create([
             'titre'=> strtolower($data['titre']),
             'matiere_id'=>$matiere->id
         ]);
         return back()->with('success','le chapitre a ete ajouter');
-        return redirect()->route('admin.index')->with('success','la chapitre a ete ajoute');
     }
 
     /**
@@ -76,6 +75,6 @@ class ChapitreController extends Controller
     public function destroy(Chapitre $chapitre)
     {
         $data=$chapitre->delete();
-        return redirect('/admin');
+        return back()->with('success','chapitre supprimer');
     }
 }

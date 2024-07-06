@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Mail;
 class EleveController extends Controller
 {
     public function registerForm():View{
-        return view('user.register',['niveaux'=>Niveau::all()]);
+        return view('user.register',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
     }
 
     public function register(EleveFormRequest $request){

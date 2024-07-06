@@ -34,7 +34,7 @@
                         <!-- Create the editor container -->
                         <label for="editor" class="form-label">Contenu</label>
                         <textarea name="content" cols="30" rows="10" class="d-none" id="name"></textarea>
-                        <div id="editor" class="mb-3">
+                        <div id="editor" class="mb-3" style="height: 100px">
                             {{-- content  --}}
                             {!! $cours->content !!}
                         </div>
@@ -64,8 +64,7 @@
                             });
                         </script>
                     </div>
-                    <button class="btn btn-primary ms-3 ">{{ $cours->id ? 'Mettre a jour' : 'Creer' }}</button>
-                    <a class="btn btn-info" href="/admin">retour</a>
+                    
                 </div>
                 <div class="col-md-2">
                     <label for="cover" class="form-label">Cover</label>
@@ -110,6 +109,8 @@
                     </div>
                 </div>
             </div>
+            <button class="btn btn-primary ms-3 ">{{ $cours->id ? 'Mettre a jour' : 'Creer' }}</button>
+            <a class="btn btn-info" href="/admin">retour</a>
             @vite('resources/backend/js/htmx.min.js')
         </form>
     </div>

@@ -42,6 +42,7 @@ class EvaluationController extends Controller
     public function show(Evaluation $eval)
     {
         // dd($eval->questions);
+        $eval->load('questions');
         return view('admin.eval.show',['eval'=>$eval]);
     }
 
