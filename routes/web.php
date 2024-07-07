@@ -20,12 +20,13 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('user/')->controller(EleveController::class)->name('user.')->group(function (){
-    Route::get('register/','registerForm')->name('registerForm');
-    Route::post('register/','register')->name('register');
-    Route::get('login/','loginForm')->name('login.form');
-    Route::post('login/','login')->name('login');
-    Route::post('logout/{user}/','logout')->name('logout');
+Route::prefix('user/')->controller(EleveController::class)->middleware('eleve')->name('user.')->group(function (){
+    Route::withoutMiddleware('eleve')->group(function(){
+        Route::get('register/','registerForm')->name('registerForm');
+        Route::post('register/','register')->name('register');
+        Route::get('login/','loginForm')->name('login.form');
+        Route::post('login/','login')->name('login');
+    });
     Route::get('otp_verification/','otpCheckForm')->name('otp.form');
     Route::post('otp_verification/','otpCheck')->name('otp');
     Route::get('pricing/','pricing')->name('pricing');
@@ -40,11 +41,16 @@ Route::prefix('user/')->controller(EleveController::class)->name('user.')->group
     });
 });
 
-Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->group(function (){
+Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->middleware('staff')->group(function (){
     Route::get('/',function (){
         $faculte=Faculte::first();
         return redirect("/admin/{$faculte->id}");
     })->name('root');
+    Route::withoutMiddleware('staff')->group(function(){
+        Route::get('login/','loginForm')->name('login.form');
+        Route::post('login/','login')->name('login');
+
+    });
     
     Route::prefix('chapitre/')->name('chapitre.')->controller(ChapitreController::class)->group(function (){
         Route::get('create/{matiere}/','create')->name('create');
@@ -79,36 +85,31 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
         Route::post('edit/{question}/','update')->name('update');
         Route::delete('destroy/{question}/','destroy')->name('delete');
     });
-    Route::prefix('enseignant/')->controller(EnseignantController::class)->name('enseignant.')->group(function(){
-        Route::get('list/','index')->name('index');
-        Route::get('create','create')->name('create');
-        Route::post('create','store')->name('store');
-        Route::get('edit/{user}','edit')->name('edit');
-        Route::post('edit/{user}','update')->name('update');
-        Route::delete('delete/{user}','destroy')->name('delete');
-        Route::post('logout/','logout')->name('logout');
-
-    });
-    Route::prefix('eleve/')->controller(EleveController::class)->name('eleve.')->group(function(){
-        Route::get('list/','index')->name('index');
-        Route::get('edit/{eleve}','edit')->name('edit');
-        Route::post('edit/{eleve}','update')->name('update');
-        Route::delete('delete/{eleve}','destroy')->name('delete');
+    Route::middleware('admin')->group(function(){
+        Route::prefix('enseignant/')->controller(EnseignantController::class)->name('enseignant.')->group(function(){
+            Route::get('list/','index')->name('index');
+            Route::get('create','create')->name('create');
+            Route::post('create','store')->name('store');
+            Route::get('edit/{user}','edit')->name('edit');
+            Route::post('edit/{user}','update')->name('update');
+            Route::delete('delete/{user}','destroy')->name('delete');
+    
+        });
+        Route::prefix('eleve/')->controller(EleveController::class)->name('eleve.')->group(function(){
+            Route::get('list/','index')->name('index');
+            Route::get('edit/{eleve}','edit')->name('edit');
+            Route::post('edit/{eleve}','update')->name('update');
+            Route::delete('delete/{eleve}','destroy')->name('delete');
+        });
     });
     Route::get('{faculte}/','indexFaculte')->name('faculte.index');
     Route::get('{faculte}/{niveau}','index')->name('index');
+
 });
 Route::get('/',function(){
     return view('user.home');
-    $faculte=Faculte::find(1);
-    dd($faculte->matiere(1));
-    $user=User::all()->last();
-    $matieres=Matiere::with(['faculte','niveau'])->get();
-    $niveaux=Niveau::with('matieres')->get();
-    Mail::to($user->email)->send(new OTPMail($user));
-    dd($niveaux[0]->matieres);
-    
 });
+Route::post('logout/',[EleveController::class,'logout'])->middleware('auth')->name('logout');
 Route::get('cours/{cours}',function(Cours $cours){
     $cours->load('files');
     return view('cours',['cours'=>$cours]);

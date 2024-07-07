@@ -202,7 +202,7 @@
                                             Activity Log
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <form class="dropdown-item" action="{{route('admin.enseignant.logout')}}" method="post">
+                                        <form class="dropdown-item" action="{{route('logout')}}" method="post">
                                             @csrf
                                             <i class="bi bi-box-arrow-left text-danger"></i>
                                             <input type="submit" value="Logout">

@@ -72,10 +72,11 @@ class EleveController extends Controller
 
     public function otpCheckForm(){
         $user=Auth::user();
-        return view('user.otp',$user);
+        return view('user.otp');
     }
 
     public function otpCheck(Request $request){
+        dd($request->user());
         $user=Auth::user();
         $regles=['required','digits:1'];
         $data=$request->validate([

@@ -8,6 +8,7 @@ use App\Models\Matiere;
 use App\Models\Niveau;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\FlareClient\Http\Exceptions\NotFound;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -25,7 +26,24 @@ class AdminController extends Controller
         return view('admin.index',['matiere'=>$matiere]);
     }
 
-    function login(){
-        
+    public function loginForm(){
+        return view('admin.login');
     }
+
+    public function login(Request $request)
+    {
+        $data=$request->validate([
+            'email'=>['required','email'],
+            'password'=>'required'
+            ]
+        );
+        $data['statut']='admin';
+        if (Auth::attempt($data)) {
+            session()->regenerate();
+            $user=Auth::user();
+            return redirect()->intended(route('admin.root'));
+        }
+        return back()->with('error','identifiants incorrect');
+    }
+
 }
