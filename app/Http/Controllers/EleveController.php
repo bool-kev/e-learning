@@ -12,16 +12,18 @@ use App\View\Components\session;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 
 class EleveController extends Controller
 {
     public function registerForm():View{
-        return view('user.register',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
+        return view('user.form',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
     }
 
     public function register(EleveFormRequest $request){
         $data=$request->validated();
+        dd($data);
         $user=User::create($data);
         $eleve=Eleve::create([
             "niveau_id" =>$data['niveau'],
@@ -33,24 +35,31 @@ class EleveController extends Controller
     }
     public function loginForm():View{
         $user=User::find(1);
-        dd($user->eleve->niveau->matieres[0]->pivot->chapitres);
-        return view('user.login');
+        // dd($user->eleve->niveau->matieres[0]->pivot->chapitres);
+        return view('user.form',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
     }
 
     public function login(Request $request){
         
         $credentials=$request->validate([
-            "email"=>['email','required'],
-            "password"=>['string','required']
+            "email"=>['email','nullable'],
+            'telephone'=>['digits:8','numeric','nullable'],
+            "password"=>['string','required'],
+            'remember'=>['nullable']
         ]);
-        if(Auth::attempt($credentials)){
+        $credentials=array_filter($credentials,function ($elt) {return $elt;});
+        if(count($credentials)<2) return back()->withErrors(['fields'=>'Renseignez au moins un email ou un numero de telephone']);
+        $remember=$credentials['remember']??false;
+        unset($credentials['remember']);
+        // dd($credentials,$remember);
+        if(Auth::attempt($credentials,$remember)){
             session()->regenerate();
             $user=Auth::user();
             if ( $user->eleve->token !=='verified') {
                 event(new EmailCheckEvent($user));
                 return to_route('user.otp.form');
             }
-            elseif(! $user->eleve->is_active) dd('payement requis');
+            elseif(! $user->eleve->is_active) return to_route('user.pricing');
             else dd('dashboard');
         }
         return back()->with('error','Identifiants incorrects');
@@ -73,11 +82,11 @@ class EleveController extends Controller
         ]);
         $user=Auth::user();
 
-        if ( implode($otp)!==$user->eleve->token){
-            return back()->withInput($otp)->with('error','OTP invalidd');
-        }elseif($user->eleve->updated_at->diffInMinutes(now())>1) {
+        if($user->eleve->updated_at->diffInMinutes(now())>1) {
             event(new EmailCheckEvent($user));
             return back()->with('error','OTP expire un nouveau a ete genere ');
+        }elseif ( implode($otp)!==$user->eleve->token){
+            return back()->withInput($otp)->with('error','OTP invalidd');
         }
             
         $user->eleve->update(['token'=>'verified']);
@@ -117,5 +126,79 @@ class EleveController extends Controller
     {
         $eleve->user->delete();
         return to_route('admin.eleve.index')->with('success','compte eleve supprimer avec success');
+    }
+
+    public function logout(User $user){
+        Auth::logout();
+        return to_route('user.login.form')->with('info','vous avez ete deconnecter');
+    }
+
+    public function pricing()
+    {
+        return view('user.pricing');
+    }
+
+    private function getTransID()
+    {
+        return "TransId".date('Ymd-His').rand(1,10000);
+    }
+
+    public function subscribe(Request $request)
+    {
+        $prix=[
+            'standard'=>100,
+            'premium'=>150
+        ];
+        $plan=$request->validate([
+            'plan'=>['required','in:standard,premium']
+        ]);
+        $plan=$request->input('plan');
+        $user=User::find(1);
+        $transId=$this->getTransID();
+        dd($plan,$this->getTransID());
+
+        $HEADERS=[
+            'Apikey'=>env('LIGDICASH_API_KEY'),
+            'Authorization'=>'Bareer '.env('LIGDICASH_TOKEN'),
+            'Accept'=>'application/json',
+            'Content-Type'=>'application/json',
+        ];
+
+        $paymentDetails = [
+            "commande" => [
+                "invoice" => [
+                    "items" => [
+                        [
+                            "name" => "Abonnement annuel",
+                            "description" => "Abonnent a l'offre $plan",
+                            "quantity" => 1,
+                            "unit_price" => $prix[$plan],
+                            "total_price" => $prix[$plan]
+                        ]
+                    ],
+                    "total_amount" => $prix[$plan],
+                    "devise" => "XOF",
+                    "description" => "abonnement annuel a l'offre $plan",
+                    "customer" => "22676275726", // Format : 22676275726 or 22997761182
+                    "customer_firstname" => "$user->nom",
+                    "customer_lastname" => "$user->prenom",
+                    "customer_email" => "$user->email",
+                    "external_id" => "",
+                    "otp" => "" // Laisser vide si non applicable
+                ],
+                "store" => [
+                    "name" => "SENSEI E-SCHOOL",
+                    "website_url" => "http://127.0.0.1:8000/"
+                ],
+                "actions" => [
+                    "cancel_url" => env('LIGDICASH_CANCEL_URL'),
+                    "return_url" => env('LIGDICASH_RETURN_URL'),
+                    "callback_url" => env('LIGDICASH_CALLBACK_URL')
+                ],
+                "custom_data" => [
+                    "transaction_id" => "2021000000001"
+                ]
+            ]
+        ];
     }
 }

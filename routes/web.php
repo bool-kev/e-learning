@@ -20,13 +20,15 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('user/')->controller(EleveController::class)->name('user.')->group(function (){
-    Route::get('register','registerForm')->name('registerForm');
-    Route::post('register','register')->name('register');
-    Route::get('login','loginForm')->name('login.form');
-    Route::post('login','login')->name('login');
-    Route::get('otp_verification','otpCheckForm')->name('otp.form');
-    Route::post('otp_verification','otpCheck')->name('otp');
-    
+    Route::get('register/','registerForm')->name('registerForm');
+    Route::post('register/','register')->name('register');
+    Route::get('login/','loginForm')->name('login.form');
+    Route::post('login/','login')->name('login');
+    Route::post('logout/{user}/','logout')->name('logout');
+    Route::get('otp_verification/','otpCheckForm')->name('otp.form');
+    Route::post('otp_verification/','otpCheck')->name('otp');
+    Route::get('pricing/','pricing')->name('pricing');
+    Route::post('pricing/','subscribe')->name('subscribe');
 });
 
 Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->group(function (){
@@ -88,6 +90,7 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->gro
     Route::get('{faculte}/{niveau}','index')->name('index');
 });
 Route::get('/',function(){
+    return view('user.home');
     $faculte=Faculte::find(1);
     dd($faculte->matiere(1));
     $user=User::all()->last();

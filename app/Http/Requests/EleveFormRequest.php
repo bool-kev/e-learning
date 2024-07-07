@@ -22,9 +22,9 @@ class EleveFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nom'=>['string','min:2'],
-            'prenom'=>['string','min:2'],
-            'telephone'=>['string','min:8','numeric','required','unique:users,telephone'],
+            'nom'=>['string','min:2','nullable'],
+            'prenom'=>['string','min:2','nullable'],
+            'telephone'=>['string','digits:8','numeric','required','unique:users,telephone'],
             'niveau'=>['required','exists:niveaux,id'],
             'email'=>['email','required','unique:users,email'],
             'password'=>['required','min:4','confirmed'],

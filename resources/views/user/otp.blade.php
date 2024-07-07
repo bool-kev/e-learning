@@ -28,6 +28,8 @@
                     <input type="number" name="field6" value="" disabled />
                 </div>
                 <button class="">Verify OTP</button>
+                <a class="btn btn-info mt-3" onclick="history.back()">retour</a>
+
             </form>
         </div>
         @vite('resources/css/otp/script.js')
