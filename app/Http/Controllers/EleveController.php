@@ -7,12 +7,15 @@ use App\Http\Requests\EleveFormRequest;
 use App\Mail\OTPMail;
 use App\Models\Eleve;
 use App\Models\Niveau;
+use App\Models\Transaction;
 use App\Models\User;
 use App\View\Components\session;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class EleveController extends Controller
@@ -23,7 +26,6 @@ class EleveController extends Controller
 
     public function register(EleveFormRequest $request){
         $data=$request->validated();
-        dd($data);
         $user=User::create($data);
         $eleve=Eleve::create([
             "niveau_id" =>$data['niveau'],
@@ -34,8 +36,6 @@ class EleveController extends Controller
         return to_route('user.otp.form')->with('success','Inscription reussi!Verifier votre mail');
     }
     public function loginForm():View{
-        $user=User::find(1);
-        // dd($user->eleve->niveau->matieres[0]->pivot->chapitres);
         return view('user.form',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
     }
 
@@ -51,42 +51,44 @@ class EleveController extends Controller
         if(count($credentials)<2) return back()->withErrors(['fields'=>'Renseignez au moins un email ou un numero de telephone']);
         $remember=$credentials['remember']??false;
         unset($credentials['remember']);
+        $credentials['statut']="etudiant";
         // dd($credentials,$remember);
         if(Auth::attempt($credentials,$remember)){
             session()->regenerate();
             $user=Auth::user();
-            if ( $user->eleve->token !=='verified') {
-                event(new EmailCheckEvent($user));
-                return to_route('user.otp.form');
+            if($user->eleve){
+                if ( $user->eleve->token !=='verified') {
+                    event(new EmailCheckEvent($user));
+                    return to_route('user.otp.form')->with('error','Votre compte a ete creer,Veuillez confirmer votre email');
+                }
+                elseif(! $user->eleve->is_active) return to_route('user.pricing');
+                else dd('dashboard');
+            }else{
+                dd($user);
             }
-            elseif(! $user->eleve->is_active) return to_route('user.pricing');
-            else dd('dashboard');
         }
         return back()->with('error','Identifiants incorrects');
     }
 
     public function otpCheckForm(){
-        return view('user.otp');
+        $user=Auth::user();
+        return view('user.otp',$user);
     }
 
     public function otpCheck(Request $request){
-        // dd(Auth::user());
+        $user=Auth::user();
         $regles=['required','digits:1'];
-        $otp=$request->validate([
-            'field1'=>$regles,
-            'field2'=>$regles,
-            'field3'=>$regles,
-            'field4'=>$regles,
-            'field5'=>$regles,
-            'field6'=>$regles
+        $data=$request->validate([
+            'fields'=>['required','array','min:6','max:6'],
+            'fields.*'=>['required','digits:1']
         ]);
         $user=Auth::user();
-
+        $otp=implode($data['fields']);
         if($user->eleve->updated_at->diffInMinutes(now())>1) {
             event(new EmailCheckEvent($user));
-            return back()->with('error','OTP expire un nouveau a ete genere ');
-        }elseif ( implode($otp)!==$user->eleve->token){
-            return back()->withInput($otp)->with('error','OTP invalidd');
+            return back()->with('error','OTP expire un nouveau vous a ete envoye');
+        }elseif ( $otp!==$user->eleve->token){
+            return back()->with('error','OTP invalid!Ressayez');
         }
             
         $user->eleve->update(['token'=>'verified']);
@@ -155,16 +157,16 @@ class EleveController extends Controller
         $plan=$request->input('plan');
         $user=User::find(1);
         $transId=$this->getTransID();
-        dd($plan,$this->getTransID());
+        // dd($plan,$this->getTransID());
 
         $HEADERS=[
             'Apikey'=>env('LIGDICASH_API_KEY'),
-            'Authorization'=>'Bareer '.env('LIGDICASH_TOKEN'),
+            'Authorization'=>'Bearer '.env('LIGDICASH_TOKEN'),
             'Accept'=>'application/json',
             'Content-Type'=>'application/json',
         ];
-
-        $paymentDetails = [
+        // dd($HEADERS);
+        $payload = [
             "commande" => [
                 "invoice" => [
                     "items" => [
@@ -196,9 +198,25 @@ class EleveController extends Controller
                     "callback_url" => env('LIGDICASH_CALLBACK_URL')
                 ],
                 "custom_data" => [
-                    "transaction_id" => "2021000000001"
+                    "transaction_id" => "$transId"
                 ]
             ]
         ];
+        // /** @var  Response*/
+        $response=Http::withHeaders($HEADERS)->asJson()->post(env('LIGDICASH_PAY_IN_ENDPOINT'),$payload);
+        if($response->successful()){
+            $data=$response->json();
+            if ($data['response_code']==='00'){
+                // dd($data);
+                Transaction::create([
+                    'transid'=>$transId,
+                    'token'=> $data['token'],
+                    'plan'=>$plan,
+                    'user_id'=>$user->id
+                ]);
+                return redirect($data['response_text']);
+            }
+        }
+        return back()->with('error','Une erreur s\'est produite');
     }
 }

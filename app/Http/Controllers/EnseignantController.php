@@ -36,8 +36,9 @@ class EnseignantController extends Controller
             'email'=>['email','required','unique:users,id'],
             'password'=>['required','confirmed','min:4']
         ]);
-        $data['statut']='enseignant';
-        $user=User::create($data);
+        $user=new User($data);
+        $user->statut='enseignant';
+        $user->save();
         return to_route('admin.enseignant.index')->with('success','enseignant ajoute avec success');
     }
 

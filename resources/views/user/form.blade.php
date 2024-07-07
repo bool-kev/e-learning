@@ -65,6 +65,7 @@
               <div class="alert alert-danger">! {{$message}}</div>
           @enderror
           <x-session key="error" type="danger"></x-session>
+          <x-session key="success"></x-session>
           <x-error key="email"></x-error>
           <x-error key="telephone"></x-error>
           <ul class="nav nav-pills d-inline-flex text-center">

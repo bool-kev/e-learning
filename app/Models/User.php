@@ -23,7 +23,6 @@ class User extends Authenticatable
         'password',
         'telephone',
         'matricule',
-        'statut'
     ];
 
     /**
@@ -56,5 +55,10 @@ class User extends Authenticatable
     public function is_staff():bool
     {
         return boolval($this->statut==="admin"||$this->statut==="enseignant");
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

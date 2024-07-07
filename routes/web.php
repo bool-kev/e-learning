@@ -7,6 +7,7 @@ use App\Http\Controllers\EleveController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Mail\OTPMail;
 use App\Models\Cours;
@@ -29,6 +30,14 @@ Route::prefix('user/')->controller(EleveController::class)->name('user.')->group
     Route::post('otp_verification/','otpCheck')->name('otp');
     Route::get('pricing/','pricing')->name('pricing');
     Route::post('pricing/','subscribe')->name('subscribe');
+    Route::prefix('transaction/')->controller(TransactionController::class)->name('trans.')->group(function(){
+        Route::get('cancel/','cancel_url')->name('cancel');
+        Route::post('cancel/','cancel_url')->name('cancel2');
+        Route::get('return/','return_url')->name('return');
+        Route::post('return/','return_url')->name('return2');
+        Route::get('callback/','callback_url')->name('callback');
+        Route::post('callback/','callback_url')->name('callback2');
+    });
 });
 
 Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->group(function (){
@@ -96,7 +105,6 @@ Route::get('/',function(){
     $user=User::all()->last();
     $matieres=Matiere::with(['faculte','niveau'])->get();
     $niveaux=Niveau::with('matieres')->get();
-    // dd($user->eleve->updated_at->diffInMinutes(now()));
     Mail::to($user->email)->send(new OTPMail($user));
     dd($niveaux[0]->matieres);
     

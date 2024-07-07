@@ -9,7 +9,7 @@
         <div class="form-group">
             <input type="text" class="form-control py-4 fs-4 text-black @error('enonce')is-invalid  @enderror"
                 id="enonce" placeholder="enonce" value="{{ old('enonce',$question->enonce) }}"
-                name="enonce">
+                name="enonce" required>
             @error('enonce')
                 <label for="enonce" class="text-danger">{{ $message }}</label>
             @enderror
@@ -17,7 +17,7 @@
         <div class="form-group">
             <input type="text" class="form-control py-4 fs-4 text-black @error('reponse')is-invalid  @enderror"
                 id="reponse" placeholder="Reponse" value="{{ old('reponse', $question->reponse) }}"
-                name="reponse">
+                name="reponse" required>
             @error('reponse')
                 <label for="reponse" class="text-danger">{{ $message }}</label>
             @enderror
@@ -46,7 +46,7 @@
         const newOption = document.createElement('div');
         newOption.classList.add(`option-field${optionCount}`,'col-md-6','mt-2');
         newOption.innerHTML = `
-            <label for="option${optionCount}" class="form-label">Option ${optionCount}</label>
+            <label for="option${optionCount}" class="form-label">Option ${optionCount+1}</label>
             <input type="text" class="form-control text-black" id="option${optionCount}" name="options[]" value="${opt}"required>
             {{--<button onclick="document.querySelector('.option-field${optionCount}').remove()" type="button">X</button>--}}
         `;

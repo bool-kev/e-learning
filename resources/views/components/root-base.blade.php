@@ -25,14 +25,16 @@
         <div class="hero-container">
           <div data-aos="fade-in">
             <div class="hero-logo">
-              <img class="" src="{{asset('images/logo.png')}}" alt="Imperial">
+              {{-- <img class="" src="{{asset('images/logo.png')}}" alt="Imperial"> --}}
+              <h1 class="logo mr-auto"><a href="index.html">SENSEI Learning</a></h1> 
+
             </div>
     
-            <h1>Bien SENSEI E-SCHOOL </h1>
+            <p>Bienvenu sur notre plateforme e-school</p>
             <h2>Vous etes? <span class="typed" data-typed-items="beautiful graphics, functional websites, working mobile apps"></span></h2>
             <div class="actions">
               <a href="#about" class="btn-get-started">enseignant</a>
-              <a href="#services" class="btn-services">eleve</a>
+              <a href="{{route('user.login.form')}}" class="btn-services">eleve</a>
             </div>
           </div>
         </div>

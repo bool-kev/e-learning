@@ -9,7 +9,7 @@
         </div><!-- End Section Title -->
         <x-error key="plan"></x-error>
         <div class="container">
-    
+            <x-session type="danger" key="error"></x-session>
             <div class="row gy-4">
     
             <div class="col-lg-6" data-aos="zoom-in" data-aos-delay="200">
