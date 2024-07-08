@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class EnseignantController extends Controller
 {
@@ -82,7 +84,25 @@ class EnseignantController extends Controller
         return to_route('admin.enseignant.index')->with('success','compte enseignant avec success');
     }
 
-    public function logout(User $user){
-        dd('logout');
+    public function loginForm(Request $request)
+    {
+        return view('admin.users.teach.login');
+    }
+
+    public function login2(Request $request){
+        $data=$request->validate([
+            'matricule'=>['required'],
+            'password'=>'required'
+            ]
+        );
+        $data['statut']='enseignant';
+        if (Auth::attempt($data)) {
+            session()->regenerate();
+            $user=Auth::user();
+            $route=session('target')??route('admin.root');
+            Session::forget('target');
+            return redirect($route);
+        }
+        return back()->with('error','identifiants incorrect');
     }
 }

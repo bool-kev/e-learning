@@ -8,15 +8,9 @@ use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\UserController;
-use App\Mail\OTPMail;
 use App\Models\Cours;
 use App\Models\Faculte;
-use App\Models\Matiere;
-use App\Models\Niveau;
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -29,6 +23,7 @@ Route::prefix('user/')->controller(EleveController::class)->middleware('eleve')-
     });
     Route::get('otp_verification/','otpCheckForm')->name('otp.form');
     Route::post('otp_verification/','otpCheck')->name('otp');
+    Route::post('otp_generate/','dispatch')->name('otp.generate');
     Route::get('pricing/','pricing')->name('pricing');
     Route::post('pricing/','subscribe')->name('subscribe');
     Route::prefix('transaction/')->controller(TransactionController::class)->name('trans.')->group(function(){
@@ -85,7 +80,7 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->mid
         Route::post('edit/{question}/','update')->name('update');
         Route::delete('destroy/{question}/','destroy')->name('delete');
     });
-    Route::middleware('admin')->group(function(){
+    Route::withoutMiddleware('staff')->middleware('admin')->group(function(){
         Route::prefix('enseignant/')->controller(EnseignantController::class)->name('enseignant.')->group(function(){
             Route::get('list/','index')->name('index');
             Route::get('create','create')->name('create');
@@ -93,6 +88,10 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->mid
             Route::get('edit/{user}','edit')->name('edit');
             Route::post('edit/{user}','update')->name('update');
             Route::delete('delete/{user}','destroy')->name('delete');
+            // Route::withoutMiddleware(['admin','staff'])->group(function(){
+            //     Route::get('login/','loginForm')->name('login.form');
+            //     Route::post('login/','login2')->name('login');
+            // });
     
         });
         Route::prefix('eleve/')->controller(EleveController::class)->name('eleve.')->group(function(){
@@ -107,10 +106,13 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->mid
 
 });
 Route::get('/',function(){
+    Auth::logout();
     return view('user.home');
 });
+Route::get('enseignant/login/',[EnseignantController::class,'loginForm'])->name('login.form');
+Route::post('enseignant/login/',[EnseignantController::class,'login2'])->name('login');
 Route::post('logout/',[EleveController::class,'logout'])->middleware('auth')->name('logout');
 Route::get('cours/{cours}',function(Cours $cours){
     $cours->load('files');
     return view('cours',['cours'=>$cours]);
-});
+})->name('cours');

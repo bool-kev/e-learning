@@ -4,22 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Events\EmailCheckEvent;
 use App\Http\Requests\EleveFormRequest;
-use App\Mail\OTPMail;
 use App\Models\Eleve;
 use App\Models\Niveau;
 use App\Models\Transaction;
 use App\Models\User;
-use App\View\Components\session;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EleveController extends Controller
 {
+    private function route(User $user)
+    {
+        $route=session('target')??route('user.pricing');
+        Session::forget('target');
+        if($user->eleve){
+            // dd($user);
+            if ( $user->eleve->token !=='verified') {
+
+                event(new EmailCheckEvent($user));
+                return to_route('user.otp.form')->with('error','Votre compte a ete creer,Veuillez confirmer votre email');
+            }
+            elseif(! $user->eleve->is_active) return to_route('user.pricing');
+            else dd('dashboard');
+        }else{
+            dd('kkk',$user);
+        }
+    }
     public function registerForm():View{
         return view('user.form',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
     }
@@ -35,7 +49,9 @@ class EleveController extends Controller
         Auth::login($user);
         return to_route('user.otp.form')->with('success','Inscription reussi!Verifier votre mail');
     }
-    public function loginForm():View{
+    public function loginForm(){
+        $user=Auth::user();
+        if ($user?->eleve) return $this->route($user);
         return view('user.form',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
     }
 
@@ -52,31 +68,22 @@ class EleveController extends Controller
         $remember=$credentials['remember']??false;
         unset($credentials['remember']);
         $credentials['statut']="etudiant";
-        // dd($credentials,$remember);
         if(Auth::attempt($credentials,$remember)){
             session()->regenerate();
             $user=Auth::user();
-            if($user->eleve){
-                if ( $user->eleve->token !=='verified') {
-                    event(new EmailCheckEvent($user));
-                    return to_route('user.otp.form')->with('error','Votre compte a ete creer,Veuillez confirmer votre email');
-                }
-                elseif(! $user->eleve->is_active) return to_route('user.pricing');
-                else dd('dashboard');
-            }else{
-                dd($user);
-            }
+            // dd('connecetd');
+            return $this->route($user);
         }
         return back()->with('error','Identifiants incorrects');
     }
 
     public function otpCheckForm(){
         $user=Auth::user();
+        if($user->eleve?->token==='verified') throw new NotFoundHttpException('indisponible');
         return view('user.otp');
     }
 
     public function otpCheck(Request $request){
-        dd($request->user());
         $user=Auth::user();
         $regles=['required','digits:1'];
         $data=$request->validate([
@@ -95,6 +102,11 @@ class EleveController extends Controller
         $user->eleve->update(['token'=>'verified']);
         return to_route('user.login')->with('success','votre mail a ete confirme veuillez vous connecter');
         
+    }
+    public function dispatch(Request $request)
+    {
+        if ($request->user()?->eleve?->token!=='verified') event(new EmailCheckEvent($request->user()));
+        return back()->with('success','un nouveau otp a ete generer');
     }
 
     public function index()
@@ -156,7 +168,7 @@ class EleveController extends Controller
             'plan'=>['required','in:standard,premium']
         ]);
         $plan=$request->input('plan');
-        $user=User::find(1);
+        $user=Auth::user();
         $transId=$this->getTransID();
         // dd($plan,$this->getTransID());
 
@@ -194,9 +206,9 @@ class EleveController extends Controller
                     "website_url" => "http://127.0.0.1:8000/"
                 ],
                 "actions" => [
-                    "cancel_url" => env('LIGDICASH_CANCEL_URL'),
-                    "return_url" => env('LIGDICASH_RETURN_URL'),
-                    "callback_url" => env('LIGDICASH_CALLBACK_URL')
+                    "cancel_url" => route('user.trans.callback'),
+                    "return_url" => route('user.trans.return'),
+                    "callback_url" => route('user.trans.callback2')
                 ],
                 "custom_data" => [
                     "transaction_id" => "$transId"

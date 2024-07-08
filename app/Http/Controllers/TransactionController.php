@@ -24,7 +24,9 @@ class TransactionController extends Controller
     }
     public function cancel_url(Request $request)
     {
-        dd($request);
+        $user=Auth::user();
+        $trans=$user->transactions->last();
+        if ($trans->statut!=='valider') $trans->update(['statut'=>'anuller']);
         return back()->with('error','Vous avez annuler la transaction');
     }
 

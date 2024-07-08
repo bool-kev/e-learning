@@ -29,9 +29,15 @@
                     <input type="number" name="fields[]" value="" disabled />
                 </div>
                 <button class="">Verify OTP</button>
-                <a class="btn btn-info mt-3" onclick="history.back()">retour</a>
-
             </form>
+                <div class="mt-3">
+                    <form action="{{route('user.otp.generate')}}" method="post" class="d-flex flex-row">
+                        @csrf
+                        <input type="submit" class="btn btn-primary" value="generer OTP" class="d-inline">
+                        <a class="btn btn-secondary ms-2" onclick="history.back()">retour</a>
+                    </form>
+                </div>
+            
         </div>
         @vite('resources/css/otp/script.js')
     </body>

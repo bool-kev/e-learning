@@ -1,6 +1,7 @@
 @php
     use App\Models\Faculte;
     use App\Models\Matiere;
+    $user=request()->user();
 @endphp
 @props(['facultes' => Faculte::all(), 'matiere'=>new Matiere()])
 @extends('base_bootstrap')
@@ -166,18 +167,19 @@
                                 </div>
                             </li>
 
-                            {{-- @dd(request()->route()->getName()) --}}
-                            <!-- Nav Item - Messages -->
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <a class="nav-link" href="#" id="userDropdown" role="button" title="gestion des utilisateur" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                    <i class="bi bi-people fs-3 text-black"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <a href="{{route('admin.eleve.index')}}" class="dropdown-item @if(str_starts_with(request()->route()->getName(),'admin.eleve'))active @endif">Eleves</a>
-                                    <a href="{{route('admin.enseignant.index')}}" class="dropdown-item @if(str_starts_with(request()->route()->getName(),'admin.enseignant'))active @endif">Enseignant</a>
-                                </ul>
-                            </li>
+                           @if ($user->statut==='admin')
+                                <!-- Nav Item - Messages -->
+                                <li class="nav-item dropdown no-arrow mx-1">
+                                    <a class="nav-link" href="#" id="userDropdown" role="button" title="gestion des utilisateur" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                        <i class="bi bi-people fs-3 text-black"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <a href="{{route('admin.eleve.index')}}" class="dropdown-item @if(str_starts_with(request()->route()->getName(),'admin.eleve'))active @endif">Eleves</a>
+                                        <a href="{{route('admin.enseignant.index')}}" class="dropdown-item @if(str_starts_with(request()->route()->getName(),'admin.enseignant'))active @endif">Enseignant</a>
+                                    </ul>
+                                </li>
+                           @endif
 
                             <div class="topbar-divider d-none d-sm-block"></div>
 

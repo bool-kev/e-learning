@@ -4,7 +4,7 @@
         <x-session key="success"></x-session>
         <x-session key="error" type="danger"></x-session>
         <h3 class="display-3">Connexion Enseignant</h3>
-        <form class="form-floating gap-2" method="POST" action="{{route('admin.login')}}">
+        <form class="form-floating gap-2" method="POST" action="{{route('login')}}">
             @csrf
             <div class="form-group my-3">
                 <input type="text" class="form-control @error('matricule')is-invalid  @enderror" id="floatingInputInvalid1" placeholder="matricule"  name="matricule" value="{{old('matricule')}}">

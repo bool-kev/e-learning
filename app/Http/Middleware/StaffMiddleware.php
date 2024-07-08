@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
 class StaffMiddleware
@@ -15,7 +17,8 @@ class StaffMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!($request->user() && $request->user()->is_staff())) return to_route('admin.login.form')->with('error','Operation non permise ');
+        Session::put('target',FacadesRequest::fullUrl());
+        if(!($request->user() && $request->user()->is_staff())) return to_route('login.form')->with('error','Operation non permise ');
         return $next($request);
     }
 }

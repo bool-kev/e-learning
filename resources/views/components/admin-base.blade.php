@@ -1,5 +1,6 @@
 @php
     use App\Models\Faculte;
+    
 @endphp
 @props(['facultes'=>Faculte::all(),'matiere'])
 

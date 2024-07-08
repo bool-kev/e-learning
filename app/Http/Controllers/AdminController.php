@@ -9,6 +9,7 @@ use App\Models\Niveau;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Spatie\FlareClient\Http\Exceptions\NotFound;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -38,10 +39,12 @@ class AdminController extends Controller
             ]
         );
         $data['statut']='admin';
+        $route=session('target')??route('admin.root');
+        Session::forget('target');
         if (Auth::attempt($data)) {
             session()->regenerate();
             $user=Auth::user();
-            return redirect()->intended(route('admin.root'));
+            return redirect($route);
         }
         return back()->with('error','identifiants incorrect');
     }
