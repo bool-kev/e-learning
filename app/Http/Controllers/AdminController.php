@@ -35,13 +35,16 @@ class AdminController extends Controller
     {
         $data=$request->validate([
             'email'=>['required','email'],
-            'password'=>'required'
+            'password'=>'required',
+            'remember'=>['nullable']
             ]
         );
+        $remember=$credentials['remember']??false;
+        unset($credentials['remember']);
         $data['statut']='admin';
         $route=session('target')??route('admin.root');
         Session::forget('target');
-        if (Auth::attempt($data)) {
+        if (Auth::attempt($data,$remember)) {
             session()->regenerate();
             $user=Auth::user();
             return redirect($route);

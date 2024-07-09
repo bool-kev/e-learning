@@ -91,12 +91,14 @@ class EnseignantController extends Controller
 
     public function login2(Request $request){
         $data=$request->validate([
-            'matricule'=>['required'],
-            'password'=>'required'
-            ]
-        );
+            "matricule"=>['alpha_num','required'],
+            "password"=>['string','required'],
+            'remember'=>['nullable']
+        ]);
+        $remember=$credentials['remember']??false;
+        unset($credentials['remember']);
         $data['statut']='enseignant';
-        if (Auth::attempt($data)) {
+        if (Auth::attempt($data,$remember)) {
             session()->regenerate();
             $user=Auth::user();
             $route=session('target')??route('admin.root');

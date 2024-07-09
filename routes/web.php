@@ -88,10 +88,10 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->mid
             Route::get('edit/{user}','edit')->name('edit');
             Route::post('edit/{user}','update')->name('update');
             Route::delete('delete/{user}','destroy')->name('delete');
-            // Route::withoutMiddleware(['admin','staff'])->group(function(){
-            //     Route::get('login/','loginForm')->name('login.form');
-            //     Route::post('login/','login2')->name('login');
-            // });
+            Route::withoutMiddleware(['admin','staff'])->group(function(){
+                Route::get('login/','loginForm')->name('login.form');
+                Route::post('login/','login2')->name('login');
+            });
     
         });
         Route::prefix('eleve/')->controller(EleveController::class)->name('eleve.')->group(function(){

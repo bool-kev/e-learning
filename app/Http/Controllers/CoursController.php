@@ -51,7 +51,7 @@ class CoursController extends Controller
     public function create(Chapitre $chapitre)
     {
         $chapitre->load('matiere');
-        return view("admin.cours.form",['chapitre'=>$chapitre,'cours'=>new Cours(),'matiere'=>$chapitre->matiere]);
+        return view("admin.cours.form2",['chapitre'=>$chapitre,'cours'=>new Cours(),'matiere'=>$chapitre->matiere]);
         
     }
 
@@ -82,7 +82,7 @@ class CoursController extends Controller
     public function edit(Cours $cours)
     {
         $cours->load('chapitre.matiere');
-        return view("admin.cours.form",['cours'=>$cours,'matiere'=>$cours->chapitre->matiere]);
+        return view("admin.cours.form2",['cours'=>$cours,'matiere'=>$cours->chapitre->matiere]);
         
     }
 
@@ -92,6 +92,7 @@ class CoursController extends Controller
     public function update(CoursFormRequest $request, Cours $cours)
     {
         $data=$this->extractData($request);
+        dd($data['content']);
         if($data['cover']??false and $cours->cover) Storage::disk('public')->delete($cours->cover);
         if($data['files']??false) $this->storeFiles($data['files'],$cours);
         $cours->update($data);

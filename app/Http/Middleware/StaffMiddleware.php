@@ -18,7 +18,8 @@ class StaffMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         Session::put('target',FacadesRequest::fullUrl());
-        if(!($request->user() && $request->user()->is_staff())) return to_route('login.form')->with('error','Operation non permise ');
+        // dump(FacadesRequest::fullUrl());
+        if(!($request->user() && $request->user()->is_staff())) return to_route('admin.enseignant.login.form')->with('error','Operation non permise ');
         return $next($request);
     }
 }

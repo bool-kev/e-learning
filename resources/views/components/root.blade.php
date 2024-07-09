@@ -33,14 +33,14 @@
 
     <main id="main">
 
-      <!-- ======= Breadcrumbs ======= -->
+      {{-- <!-- ======= Breadcrumbs ======= -->
       <section class="breadcrumbs">
         <div class="container">
 
           
 
         </div>
-      </section><!-- End Breadcrumbs -->
+      </section><!-- End Breadcrumbs --> --}}
 
       <section class="inner-page">
         <div class="container d-flex justify-content-center p-3">

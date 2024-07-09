@@ -59,7 +59,7 @@
 
       <div class="form login">
         <header>Login</header>
-        <form action="{{route('user.login')}}" method="post">
+        <form action="{{route('user.login')}}" method="post" class="mt-3">
           @csrf
           @error('fields')
               <div class="alert alert-danger">! {{$message}}</div>
@@ -107,8 +107,8 @@
             <a href="#" class="ms-5">mot de passe oublie?</a>
 
           </div>
-          <p class="text-center">Vous etes nouveau ?<a class="text-primary" style="cursor: pointer" onclick="document.querySelector('.signup header').dispatchEvent(new Event('click'));">s'inscrire</a></p>
-          <input type="submit" value="Login" />
+          <p class="text-center m-0 p-0">Vous etes nouveau ?<a class="text-primary" style="cursor: pointer" onclick="document.querySelector('.signup header').dispatchEvent(new Event('click'));">s'inscrire</a></p>
+          <input type="submit" value="Login" class="m-0 p-0"/>
         </form>
       </div>
 

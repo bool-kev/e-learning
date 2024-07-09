@@ -194,7 +194,7 @@ class EleveController extends Controller
                     "total_amount" => $prix[$plan],
                     "devise" => "XOF",
                     "description" => "abonnement annuel a l'offre $plan",
-                    "customer" => "22676275726", // Format : 22676275726 or 22997761182
+                    "customer" => "$user->telephone", // Format : 22676275726 or 22997761182
                     "customer_firstname" => "$user->nom",
                     "customer_lastname" => "$user->prenom",
                     "customer_email" => "$user->email",
