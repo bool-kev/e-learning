@@ -2,8 +2,11 @@
     <x-session key="success"></x-session>
     <div class="d-flex justify-content-around mb-3">
         <h5 class="">Liste des enseignant</h5>
-        <a href="{{route('admin.enseignant.create')}}" class="btn btn-primary">enregistrer un enseignant</a>
-    </div>
+        <a href="{{route('admin.enseignant.create')}}" class="btn btn-primary">
+            <i class="bi bi-folder-plus"></i>
+            enseignant
+        </a>   
+     </div>
     <table class="table table-hover table-striped table-responsive-sm">
         <thead>
             <th>#id</th>

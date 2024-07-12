@@ -39,8 +39,8 @@ class AdminController extends Controller
             'remember'=>['nullable']
             ]
         );
-        $remember=$credentials['remember']??false;
-        unset($credentials['remember']);
+        $remember=$data['remember']??false;
+        unset($data['remember']);
         $data['statut']='admin';
         $route=session('target')??route('admin.root');
         Session::forget('target');

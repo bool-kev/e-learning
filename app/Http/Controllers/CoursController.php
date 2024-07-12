@@ -8,6 +8,7 @@ use App\Models\Cours;
 use App\Models\Faculte;
 use App\Models\Fichier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -62,6 +63,7 @@ class CoursController extends Controller
     {
         $data=$this->extractData($request);
         $data['chapitre_id']=$chapitre->id;
+        $data['user_id']=Auth::user()->id;
         $cours=Cours::create($data);
         if($data['files']??false) $this->storeFiles($data['files'],$cours);
         return back()->with('success','cours ajoute avec success');

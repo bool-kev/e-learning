@@ -83,10 +83,10 @@
                                     }],
                                     ["bold", "italic", "underline", "strike"],
                                     [{
-                                        color: []
+                                        color: ['red','blue','white','cyan','yellow','black']
                                         },
                                         {
-                                        background: []
+                                        background: ['red','blue','white','cyan','yellow','black']
                                         }
                                     ],
                                     [{

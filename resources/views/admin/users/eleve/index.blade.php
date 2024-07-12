@@ -2,7 +2,10 @@
     <x-session key="success"></x-session>
     <div class="d-flex justify-content-around mb-3">
         <h5 class="">Liste des eleves</h5>
-        <a href="{{route('user.registerForm')}}" class="btn btn-primary">Ajouter un eleve</a>
+        <a href="{{route('user.register')}}" class="btn btn-primary">
+            <i class="bi bi-folder-plus"></i>
+            eleve
+        </a>  
     </div>
     <table class="table table-hover table-striped table-responsive-sm" style="overflow: scroll">
         <thead>

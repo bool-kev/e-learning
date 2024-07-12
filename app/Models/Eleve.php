@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Note;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Eleve extends Model
 {
@@ -20,5 +21,10 @@ class Eleve extends Model
 
     public function niveau(){
         return $this->belongsTo(Niveau::class);
+    }
+
+    public function notes()
+    {
+        return $this->belongsToMany(Note::class,'notes','eleve_id','evaluation_id');
     }
 }

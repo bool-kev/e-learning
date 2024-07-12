@@ -45,7 +45,7 @@
 
                 <!-- Sidebar - Brand -->
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.root') }}">
-                    <div class="sidebar-brand-text mx-3 d-inline">Admin</div>
+                    <div class="sidebar-brand-text mx-3 d-inline"><i class="bi bi-dot text-success fs-2"></i>{{$user->statut}}</div>
                 </a>
 
                 <!-- Divider -->
@@ -98,20 +98,7 @@
                             <i class="bi bi-list"></i>
                         </button>
 
-                        <!-- Topbar Search -->
-
                         @if ($matiere->id)
-                        <form class="d-none d-sm-inline-block form-inline mr-3 ml-md-3 my-2 my-md-0 mw-100 navbar-search w-50">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small"
-                                    placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="bi bi-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
 
                         <form class="form-inline mt-2 mx-3 w-50 d-none d-md-block">
                             <div class="input-group w-100">
@@ -135,7 +122,9 @@
                             </div>
                         </form>
                         @else
-                            <a href="{{route('admin.root')}}" class="">Gestion des cours</a>
+                            <a href="{{route('admin.root')}}" class="ms-0">Gestion des cours</a>
+                            <a href="{{route('admin.eleve.index')}}" class="mx-3 @if(str_starts_with(request()->route()->getName(),'admin.eleve'))active @endif">Eleves</a>
+                            <a href="{{route('admin.enseignant.index')}}" class="mx-3 @if(str_starts_with(request()->route()->getName(),'admin.enseignant'))active @endif">Enseignant</a>
                         @endif
 
 
@@ -188,26 +177,18 @@
                                 <div class="btn-group">
                                     <a type="button" class="nav-link  dropdown-toggle me-2 text-black" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        Action
+                                        <i class="bi bi-person-circle fs-2"></i>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <a class="dropdown-item" href="#">
                                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Profile
                                         </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Settings
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Activity Log
-                                        </a>
+                                        
                                         <div class="dropdown-divider"></div>
                                         <form class="dropdown-item" action="{{route('logout')}}" method="post">
                                             @csrf
-                                            <i class="bi bi-box-arrow-left text-danger"></i>
-                                            <input type="submit" value="Logout">
+                                            <button class="btn btn-danger w-75"><i class="bi bi-box-arrow-left"></i></button>
                                         </form>
                                     </ul>
                                 </div>

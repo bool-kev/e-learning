@@ -1,17 +1,22 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ChapitreController;
-use App\Http\Controllers\CoursController;
-use App\Http\Controllers\EleveController;
-use App\Http\Controllers\EnseignantController;
-use App\Http\Controllers\EvaluationController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\TransactionController;
+use App\Models\User;
 use App\Models\Cours;
 use App\Models\Faculte;
+use App\Models\Question;
+use App\Models\Evaluation;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CoursController;
+use App\Http\Controllers\EleveController;
+use App\Http\Controllers\ChapitreController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\EnseignantController;
+use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\TransactionController;
 
 
 Route::prefix('user/')->controller(EleveController::class)->middleware('eleve')->name('user.')->group(function (){
@@ -116,3 +121,18 @@ Route::get('cours/{cours}',function(Cours $cours){
     $cours->load('files');
     return view('cours',['cours'=>$cours]);
 })->name('cours');
+
+Route::get('test/{eval}',function(Evaluation $eval){
+    return view('test',['devoir'=>$eval]);
+})->name('test');
+Route::post('test/{eval}',function(Evaluation $eval,Request $request){
+    $eval->load('questions');
+    $reponses=$request->input('question');
+    $note=0;
+    foreach($reponses as $question_id=>$reponse){
+       if($eval->questions->find($question_id)?->reponse===$reponse) $note++;
+    }
+    $user=User::find(3)->eleve;
+    $user->notes()->attach($eval->id,['note'=>$note]);
+})->name('test2');
+

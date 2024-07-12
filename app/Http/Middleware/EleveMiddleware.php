@@ -18,7 +18,8 @@ class EleveMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         Session::put('target', FacadesRequest::fullUrl());
-        if ($request->user()?->eleve && $request->user()->statut === 'etudiant') return $next($request);
+        $user=$request->user();
+        if ($user?->eleve && $request->user()->statut === 'etudiant') return $next($request);
         return to_route('user.login.form');
     }
 }

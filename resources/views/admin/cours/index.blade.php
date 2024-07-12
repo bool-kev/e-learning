@@ -4,7 +4,8 @@
         <h3>Cours</h3>
         <a href="{{route('admin.cours.create',$chapitre)}}" class="btn btn-primary">
             <i class="bi bi-folder-plus"></i>
-            cours</a>
+            cours
+        </a>
     </div>
     <table class="table table-striped table-hover mt-3">
         <thead>

@@ -19,19 +19,18 @@ class EleveController extends Controller
 {
     private function route(User $user)
     {
-        $route=session('target')??route('user.pricing');
-        Session::forget('target');
-        if($user->eleve){
-            // dd($user);
-            if ( $user->eleve->token !=='verified') {
+        if($user){
+            $route=session('target')??route('user.pricing');
+            Session::forget('target');
+            if($user->eleve){
+                if ( $user->eleve->token !=='verified') {
 
-                event(new EmailCheckEvent($user));
-                return to_route('user.otp.form')->with('error','Votre compte a ete creer,Veuillez confirmer votre email');
+                    event(new EmailCheckEvent($user));
+                    return to_route('user.otp.form')->with('error','Votre compte a ete creer,Veuillez confirmer votre email');
+                }
+                elseif(! $user->eleve->is_active) return to_route('user.pricing');
+                else dd('dashboard');
             }
-            elseif(! $user->eleve->is_active) return to_route('user.pricing');
-            else dd('dashboard');
-        }else{
-            dd('kkk',$user);
         }
     }
     public function registerForm():View{
@@ -79,7 +78,7 @@ class EleveController extends Controller
 
     public function otpCheckForm(){
         $user=Auth::user();
-        if($user->eleve?->token==='verified') throw new NotFoundHttpException('indisponible');
+        if($user->eleve?->token==='verified') abort(403,'cette page vous est interdite');
         return view('user.otp');
     }
 

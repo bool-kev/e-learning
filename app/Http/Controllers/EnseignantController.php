@@ -95,8 +95,8 @@ class EnseignantController extends Controller
             "password"=>['string','required'],
             'remember'=>['nullable']
         ]);
-        $remember=$credentials['remember']??false;
-        unset($credentials['remember']);
+        $remember=$data['remember']??false;
+        unset($data['remember']);
         $data['statut']='enseignant';
         if (Auth::attempt($data,$remember)) {
             session()->regenerate();

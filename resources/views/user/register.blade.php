@@ -3,7 +3,7 @@
     <body class="container">
         <x-session key="success"></x-session>
         <x-session key="error" type="danger"></x-session>
-        <h3 class="display-3">Inscripton</h3>
+        <h3 class="display-3">Profile</h3>
         <form class="form-floating gap-2" method="POST" action="">
             @csrf
             <div class="row">
