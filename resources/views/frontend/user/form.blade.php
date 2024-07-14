@@ -83,7 +83,7 @@
           </ul>
           <div class="tab-content">
             <div id="tab-1" class="tab-pane fade show p-0 active">
-              <input id="email" name="email" type="email" class="w-100" placeholder="Email address" />
+              <input id="email" name="email" type="email" class="w-100" placeholder="Email address" value="{{old('email')}}"/>
               @error('email')
                 <label for="email" class="text-danger">{{$message}}</label>
               @enderror

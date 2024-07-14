@@ -15,7 +15,7 @@ class Cours extends Model
     }
 
     public function getCover(){
-        return Storage::disk('public')->url($this->cover);
+        return $this->cover?Storage::url($this->cover):asset('images/cours2.png');
     }
 
     public function chapitre(){

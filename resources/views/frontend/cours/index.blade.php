@@ -1,4 +1,7 @@
 <x-frontend  :chapitre="$chapitre" >
+  @php
+    Carbon\Carbon::setLocale('fr');
+  @endphp
   <style>
     .active{
             color:black !important;
@@ -8,7 +11,7 @@
         transition: transform 0.2s;
     }
     .card:hover {
-        transform: scale(1.2);
+        transform: scale(1.05);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     .card-img-top {
@@ -27,18 +30,7 @@
               </ol>
             </nav>
           </div>
-        </div>
-
-       <div class="col-6">
-          <select class="form-select" aria-label="Default select example">
-              @forelse ($chapitre->matiere->chapitres as $chap)
-              <option @class([ 'text-light']) @selected($chapitre->id===$chap->id)>{{ $chap->titre }}</option>
-              @empty
-              <option value=""></option>
-              @endforelse
-            </select>
-       </div>
-        
+        </div>        
                 
           
         <div class="col-6">
@@ -56,22 +48,22 @@
         <h3 class="text-center">Aucun cours trouvé pour ce chapitre</h3>
     @else
         <div class="row">
-            @foreach ($chapitre->cours as $cour)
-                <div class="col-md-4 mb-4">
-                    <div class="card h-80">
-                        <img src="{{ $cour->getCover() }}" class="card-img-top" alt="{{ $cour->titre }}">
+            @foreach ($chapitre->cours->sortByDesc('created_at') as $cour)
+                <div class="col col-md-6 col-lg-4 mb-4">
+                    <div class="card">
+                        <img src="{{ $cour->getCover() }}" class="card-img-top" alt="{{ $cour->titre }}" style="width: 100%;height: 10rem;object-fit: cover">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">
-                                <a href="{{ route('user.cours.show', $cour) }}" class="text-dark text-decoration-none">{{ $cour->titre }}</a>
+                                <a href="{{ route('user.cours.show', $cour) }}" class="text-dark text-decoration-none text-decoration-underline">{{ $cour->titre }}</a>
                             </h5>
-                            <p class="card-text text-truncate">
-                                <small class="text-muted">{{ $cour->description }}</small>
+                            <p class="card-text" style="height:3rem;">
+                                <small class="text-muted">{{ Str::limit($cour->description,60) }}</small>
                             </p>
                             <hr>
                             <div class="mt-auto">
                                 <div class="d-flex justify-content-between">
-                                    <small class="text-muted">Publié le {{ $cour->created_at->format('d M Y') }}</small>
-                                    <small class="text-muted">{{ $cour->vues }} vue(s)</small>
+                                    <small class="text-muted">Publié le {{ $cour->created_at->diffForHumans() }}</small>
+                                    <small class="text-muted">{{ $cour->vues }} lecture(s)</small>
                                 </div>
                             </div>
                         </div>

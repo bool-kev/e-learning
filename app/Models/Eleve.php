@@ -25,6 +25,11 @@ class Eleve extends Model
 
     public function notes()
     {
-        return $this->belongsToMany(Note::class,'notes','eleve_id','evaluation_id');
+        return $this->hasMany(Note::class);
+    }
+
+    public function is_composer(Evaluation $eval)
+    {
+        return $this->notes->where('evaluation_id',$eval->id)->first();
     }
 }

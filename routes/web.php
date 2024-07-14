@@ -31,6 +31,8 @@ Route::prefix('user/')->controller(EleveController::class)->middleware('eleve','
         Route::post('otp_generate/','dispatch')->name('otp.generate');
         Route::get('pricing/','pricing')->name('pricing');
         Route::post('pricing/','subscribe')->name('subscribe');
+        Route::get('profile/edit/','profileEdit')->name('profile.edit');
+        Route::post('profile/edit','profile')->name('profile.update');
     });
     
     Route::prefix('transaction/')->controller(TransactionController::class)->name('trans.')->group(function(){
@@ -48,8 +50,9 @@ Route::prefix('user/')->controller(EleveController::class)->middleware('eleve','
         Route::get('/{matiere}/{chapitre}/','listing')->name('list');
     });
     Route::prefix('evaluation/')->controller(EvaluationController::class)->name('eval.')->group(function(){
-        Route::get('{matiere}/','index')->name('index');
         Route::post('submit/{eval}','submit')->name('submit');
+        Route::get('correction/{eval}','solution')->name('solution');
+        Route::get('{matiere}/','index')->name('index');
     });
 });
 

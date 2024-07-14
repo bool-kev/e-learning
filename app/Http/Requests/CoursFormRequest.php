@@ -24,8 +24,8 @@ class CoursFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'titre'=>['required','string','min:4'],
-            'description'=>['string','nullable'],
+            'titre'=>['required','string','min:4','max:200'],
+            'description'=>['string','nullable','max:255'],
             'content'=>['required','string'],
             'cover'=>['image','max:2048'],
             'files'=>['array','max:5'],

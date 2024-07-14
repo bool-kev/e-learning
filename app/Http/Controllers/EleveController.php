@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EleveController extends Controller
@@ -89,7 +90,7 @@ class EleveController extends Controller
         ]);
         $user=Auth::user();
         $otp=implode($data['fields']);
-        if($user->eleve->updated_at->diffInMinutes(now())>1) {
+        if($user->eleve->updated_at->diffInMinutes(now())>5) {
             event(new EmailCheckEvent($user));
             return back()->with('error','OTP expire un nouveau vous a ete envoye');
         }elseif ( $otp!==$user->eleve->token){
@@ -143,6 +144,37 @@ class EleveController extends Controller
     public function logout(User $user){
         Auth::logout();
         return to_route('user.login.form')->with('info','vous avez ete deconnecter');
+    }
+
+    public function profileEdit()
+    {
+        return view('frontend.user.profile');
+    }
+
+    public function profile(Request $request)
+    {
+        $user=$request->user();
+        $data=$request->validate([
+            'photo'=>['image','nullable','max:3072'],
+            'nom'=>['min:2','string','nullable'],
+            'prenom'=>['min:2','string','nullable'],
+            'telephone'=>['required',"unique:users,telephone,$user->id"],
+        ]);
+        if($request->input('current_password')){
+            $credentials=$request->validate([
+                'current_password'=>['required','current_password'],
+                'password'=>['required','confirmed']
+            ]);
+            $data=array_merge($data,$credentials);
+        }
+        if($data['photo']??false)
+        {
+            if($user->photo) Storage::disk('public')->delete($user->photo);
+            $data['photo']=$data['photo']->store('Avatar','public');
+        }
+        $user->update($data);
+        return back()->with('success','Profils mis a jour');
+
     }
 
     public function pricing()

@@ -22,7 +22,7 @@
             <div class=" mt-5">
                 <div class="form-group ">
                     <label for="intitule" class="form-label text-black">Intutile de l'evaluation</label>
-                    <input type="text" class="form-control py-4 fs-4 @error('intitule')is-invalid  @enderror"
+                    <input type="text" class="form-control my-2 @error('intitule')is-invalid  @enderror"
                         id="intitule" placeholder="intitule" value="{{ old('intitule', $eval->intitule) }}"
                         name="intitule">
                     @error('intitule')
@@ -31,13 +31,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-6 ">
                         <label for="duree" class="form-label text-black">duree</label>
-                        <input type="number" class="form-control py-4 fs-4  @error('duree')is-invalid  @enderror"
-                            id="duree" placeholder="duree..." value="{{ old('duree', $eval->duree) }}"
-                            name="duree">
-                            <select name="duree" id="duree" >
-                                <option value="5">5 min</option>
+                            <select name="duree" id="duree" class="form-select">
+                                <option value="5" >5 min</option>
                                 <option value="10">10 min</option>
                                 <option value="15">15 min</option>
                                 <option value="30">30 min</option>
@@ -46,9 +43,9 @@
                             <label for="duree" class="text-danger">{{ $message }}</label>
                         @enderror
                     </div>
-                    <div class="form-group col-6">
+                    <div class="form-group col-6 my-2">
                         <label for="date" class="form-label text-black">date</label>
-                        <input type="datetime-local" class="form-control py-4 fs-4 @error('date')is-invalid  @enderror"
+                        <input type="datetime-local" class="form-control @error('date')is-invalid  @enderror"
                             id="date" placeholder="date..." value="{{ old('date', $eval->date) }}" name="date">
                         @error('date')
                             <label for="date" class="text-danger">{{ $message }}</label>

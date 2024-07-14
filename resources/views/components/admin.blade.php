@@ -91,7 +91,7 @@
                 <div id="content">
 
                     <!-- Topbar -->
-                    <nav class="navbar navbar-expand navbar-light  topbar mb-4 static-top shadow" style="background-color: rgba(165, 142, 142,.25);" >
+                    <nav class="navbar navbar-expand navbar-light  topbar mb-4 static-top shadow " style="background-color: rgba(165, 142, 142,.25);" >
 
                         <!-- Sidebar Toggle (Topbar) -->
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -130,7 +130,7 @@
 
 
                         <!-- Topbar Navbar -->
-                        <ul class="navbar-nav ml-auto">
+                        <ul class="navbar-nav w-100 d-flex flex-row justify-content-end">
 
                             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                             <li class="nav-item dropdown no-arrow d-sm-none">

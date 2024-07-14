@@ -3,9 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -23,6 +24,7 @@ class User extends Authenticatable
         'password',
         'telephone',
         'matricule',
+        'photo'
     ];
 
     /**
@@ -64,5 +66,9 @@ class User extends Authenticatable
 
     public function full_name(){
         return $this->prenom.' '.$this->nom;
+    }
+
+    public function getAvatar(){
+        return $this->photo?Storage::url($this->photo):asset('images/about-img.jpg');
     }
 }

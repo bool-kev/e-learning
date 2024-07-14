@@ -83,10 +83,19 @@ class EvaluationController extends Controller
         foreach($reponses as $question_id=>$reponse){
            if($eval->questions->find($question_id)?->reponse===$reponse) $note++;
         }
-        $user=$request->user()->eleve;
-        // $user->notes()->attach($eval->id,['note'=>$note]);
-        // dd($reponses);
-        return back();
+        $eleve=$request->user()->eleve->load('notes');
+        Note::create([
+            'eleve_id'=>$eleve->id,
+            'evaluation_id'=>$eval->id,
+            'note'=>$note
+        ]);
+        return view('frontend.eval.details',['reponses'=>$reponses,'eval'=>$eval,'note'=>$note]);
 
+    }
+    
+    public function solution(Request $request ,Evaluation $eval)
+    {
+        $eval->load('questions');
+        return view('frontend.eval.form',['eval'=>$eval]);
     }
 }

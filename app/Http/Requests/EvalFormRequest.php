@@ -22,9 +22,9 @@ class EvalFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "intitule"=>['required','string','min:4'],
+            "intitule"=>['required','string','min:4','max:240'],
             'date'=>['required','date_format:Y-m-d\TH:i','after:now'],
-            'duree'=>['required','numeric','max:2'],
+            'duree'=>['required','numeric','min:2','max:30'],
             'matiere_id'=>['required','numeric','exists:matieres,id']
         ];
 

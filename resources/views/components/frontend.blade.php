@@ -19,7 +19,7 @@
     .link{
       margin-left:10px !important;
     }
-    .nav-item.active{
+    .lnk.active{
       color: blue !important;
       text-decoration: underline !important;
     }
@@ -46,27 +46,49 @@
     <div class="col-6 display ">
       <ul class="nav nav-underline " >
         <li class="nav-item ">
-          <a class="nav-link text-black " href="{{--route('facultes',$chapitre)--}}">Cours</a>
+          <a class="nav-link text-black lnk " href="{{route('user.cours.root',$chapitre)}}">Cours</a>
         </li>
-        <li class="nav-item link  @if(! $chapitre->id)active @endif">
+        <li class="nav-item link lnk  @if(! $chapitre->id)active @endif">
           <a class="nav-link text-black" href="@if($chapitre->id){{route('user.eval.index',$chapitre->matiere)}} @else # @endif">Evaluations</a>
         </li>
       </ul>
     </div>
     
 
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
-        <li class="nav-item dropdown pe-3">
-
-          <a class="nav-link nav-profile d-flex align-items-center pe-0 bi bi-person-circle" href="#" data-bs-toggle="dropdown">
-            <!-- <img src="{{asset('images/card.jpg')}}" alt="Profile" class="rounded-circle"> -->
-            <span class="d-none d-md-block dropdown-toggle ps-2">{{$user->nom}}</span>
-          </a><!-- End Profile Iamge Icon -->
-        </li><!-- End Profile Nav -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
+    <nav class="navbar navbar-expand navbar-light w-100">
+      <div class="container">
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav float-end">
+                  <li class="nav-item">
+                      <div class="user-info">
+                          @if (isset($user->photo))
+                              <img src="{{ $user->getAvatar() }}" alt="User Photo" style="border-radius: 50%;width: 3rem;height: 3rem;">
+                          @else
+                              <i class="bi bi-person-circle"></i>
+                          @endif
+                        </div>
+                      </li>
+                      <a class=" dropdown-toggle mt-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ $user->nom}}</a>
+                  <li class="nav-item dropdown">
+                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                          <li>
+                              <a href="{{route('user.profile.edit')}}" class="dropdown-item ">
+                                  <i class="bi bi-person-fill text-primary"></i>
+                                  Profil
+                              </a>
+                          </li>
+                          <li>
+                              <a href="" class="dropdown-item ">
+                                  <i class="bi bi-box-arrow-left text-primary"></i>
+                                  Déconnexion
+                              </a>
+                          </li>
+                      </ul>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
 
   </header><!-- End Header -->
  

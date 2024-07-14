@@ -156,7 +156,7 @@
             <hr>
             <div class="d-flex justify-content-around">
                 <h3 class="fst-italic">Evaluation</h3>
-<a href="{{ route('admin.eval.create', $matiere) }}" class="btn btn-primary"><i class="bi bi-file-earmark-plus"></i>programmer</a>
+                <a href="{{ route('admin.eval.create', $matiere) }}" class="btn btn-primary"><i class="bi bi-file-earmark-plus"></i>programmer</a>
             </div>
             @if ($matiere->evaluations->count())
                 <table class="table table-striped table-hover mt-3">
