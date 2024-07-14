@@ -20,7 +20,7 @@ class EleveController extends Controller
     private function route(User $user)
     {
         if($user){
-            $route=session('target')??route('user.pricing');
+            $route=session('target')??route('user.cours.root');
             Session::forget('target');
             if($user->eleve){
                 if ( $user->eleve->token !=='verified') {
@@ -29,12 +29,12 @@ class EleveController extends Controller
                     return to_route('user.otp.form')->with('error','Votre compte a ete creer,Veuillez confirmer votre email');
                 }
                 elseif(! $user->eleve->is_active) return to_route('user.pricing');
-                else dd('dashboard');
+                elseif ($user->eleve->is_active) return redirect($route);
             }
         }
     }
     public function registerForm():View{
-        return view('user.form',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
+        return view('frontend.user.form',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
     }
 
     public function register(EleveFormRequest $request){
@@ -51,7 +51,7 @@ class EleveController extends Controller
     public function loginForm(){
         $user=Auth::user();
         if ($user?->eleve) return $this->route($user);
-        return view('user.form',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
+        return view('frontend.user.form',['niveaux'=>Niveau::all(),'eleve'=>new Eleve()]);
     }
 
     public function login(Request $request){
@@ -60,18 +60,16 @@ class EleveController extends Controller
             "email"=>['email','nullable'],
             'telephone'=>['digits:8','numeric','nullable'],
             "password"=>['string','required'],
-            'remember'=>['nullable']
         ]);
         $credentials=array_filter($credentials,function ($elt) {return $elt;});
         if(count($credentials)<2) return back()->withErrors(['fields'=>'Renseignez au moins un email ou un numero de telephone']);
-        $remember=$credentials['remember']??false;
-        unset($credentials['remember']);
+        $remember=$request->boolean('remember',false);
         $credentials['statut']="etudiant";
         if(Auth::attempt($credentials,$remember)){
             session()->regenerate();
             $user=Auth::user();
             // dd('connecetd');
-            return $this->route($user);
+            $this->route($user);
         }
         return back()->with('error','Identifiants incorrects');
     }
@@ -79,7 +77,7 @@ class EleveController extends Controller
     public function otpCheckForm(){
         $user=Auth::user();
         if($user->eleve?->token==='verified') abort(403,'cette page vous est interdite');
-        return view('user.otp');
+        return view('frontend.user.otp');
     }
 
     public function otpCheck(Request $request){
@@ -119,7 +117,7 @@ class EleveController extends Controller
      */
     public function edit(Eleve $eleve)
     {
-        return view('user.register',['eleve'=>$eleve]);
+        return view('frontend.user.register',['eleve'=>$eleve]);
     }
 
     /**
@@ -149,7 +147,7 @@ class EleveController extends Controller
 
     public function pricing()
     {
-        return view('user.pricing');
+        return view('frontend.user.pricing');
     }
 
     private function getTransID()

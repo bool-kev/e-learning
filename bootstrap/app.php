@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CheckerMiddleware;
 use App\Http\Middleware\EleveMiddleware;
 use App\Http\Middleware\StaffMiddleware;
 use Illuminate\Foundation\Application;
@@ -18,7 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'staff'=>StaffMiddleware::class,
             'admin'=>AdminMiddleware::class,
-            'eleve'=>EleveMiddleware::class
+            'eleve'=>EleveMiddleware::class,
+            'safe'=>CheckerMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

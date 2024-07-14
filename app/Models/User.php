@@ -61,4 +61,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function full_name(){
+        return $this->prenom.' '.$this->nom;
+    }
 }

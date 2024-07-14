@@ -3,34 +3,36 @@
 use App\Models\User;
 use App\Models\Cours;
 use App\Models\Faculte;
-use App\Models\Question;
 use App\Models\Evaluation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CoursController;
 use App\Http\Controllers\EleveController;
 use App\Http\Controllers\ChapitreController;
+use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\TransactionController;
 
 
-Route::prefix('user/')->controller(EleveController::class)->middleware('eleve')->name('user.')->group(function (){
-    Route::withoutMiddleware('eleve')->group(function(){
-        Route::get('register/','registerForm')->name('registerForm');
-        Route::post('register/','register')->name('register');
-        Route::get('login/','loginForm')->name('login.form');
-        Route::post('login/','login')->name('login');
+Route::prefix('user/')->controller(EleveController::class)->middleware('eleve','safe')->name('user.')->group(function (){
+    Route::withoutMiddleware('safe')->group(function (){
+        Route::withoutMiddleware('eleve')->group(function(){
+            Route::get('register/','registerForm')->name('registerForm');
+            Route::post('register/','register')->name('register');
+            Route::get('login/','loginForm')->name('login.form');
+            Route::post('login/','login')->name('login');
+        });
+        Route::get('otp_verification/','otpCheckForm')->name('otp.form');
+        Route::post('otp_verification/','otpCheck')->name('otp');
+        Route::post('otp_generate/','dispatch')->name('otp.generate');
+        Route::get('pricing/','pricing')->name('pricing');
+        Route::post('pricing/','subscribe')->name('subscribe');
     });
-    Route::get('otp_verification/','otpCheckForm')->name('otp.form');
-    Route::post('otp_verification/','otpCheck')->name('otp');
-    Route::post('otp_generate/','dispatch')->name('otp.generate');
-    Route::get('pricing/','pricing')->name('pricing');
-    Route::post('pricing/','subscribe')->name('subscribe');
+    
     Route::prefix('transaction/')->controller(TransactionController::class)->name('trans.')->group(function(){
         Route::get('cancel/','cancel_url')->name('cancel');
         Route::post('cancel/','cancel_url')->name('cancel2');
@@ -38,6 +40,16 @@ Route::prefix('user/')->controller(EleveController::class)->middleware('eleve')-
         Route::post('return/','return_url')->name('return2');
         Route::get('callback/','callback_url')->name('callback');
         Route::post('callback/','callback_url')->name('callback2');
+    });
+    Route::prefix('cours/')->controller(CoursController::class)->name('cours.')->group(function(){
+        Route::get('','rootListing')->name('root');
+        Route::get('show/{cours}/','show')->name('show');
+        Route::post('comment/store',[CommentaireController::class,'store'])->name('comment.store');
+        Route::get('/{matiere}/{chapitre}/','listing')->name('list');
+    });
+    Route::prefix('evaluation/')->controller(EvaluationController::class)->name('eval.')->group(function(){
+        Route::get('{matiere}/','index')->name('index');
+        Route::post('submit/{eval}','submit')->name('submit');
     });
 });
 
@@ -112,7 +124,7 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->mid
 });
 Route::get('/',function(){
     Auth::logout();
-    return view('user.home');
+    return view('frontend.user.home');
 });
 Route::get('enseignant/login/',[EnseignantController::class,'loginForm'])->name('login.form');
 Route::post('enseignant/login/',[EnseignantController::class,'login2'])->name('login');

@@ -93,10 +93,8 @@ class EnseignantController extends Controller
         $data=$request->validate([
             "matricule"=>['alpha_num','required'],
             "password"=>['string','required'],
-            'remember'=>['nullable']
         ]);
-        $remember=$data['remember']??false;
-        unset($data['remember']);
+        $remember=$request->boolean('remember',false);
         $data['statut']='enseignant';
         if (Auth::attempt($data,$remember)) {
             session()->regenerate();

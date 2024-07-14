@@ -15,7 +15,7 @@
         <x-session type="danger" key="error"></x-session>
         <x-session type="success" key="success"></x-session>
         <div id="cover2"></div>
-        <h1 class="diplay-3 my-4">{{ $eval->id ? 'Modifier le chapitre' : 'Enregistrer un nouvel chapitre' }}</h1>
+        <h1 class="diplay-3 my-4">{{ $eval->id ? 'Modifier une evaluation' : 'Programmer une evaluation' }}</h1>
         <form action="{{ route('admin.eval.store') }}" method="post" class="" id="form">
             @csrf
             <input type="hidden" name="matiere_id" value="{{ $matiere->id }}">
@@ -36,6 +36,12 @@
                         <input type="number" class="form-control py-4 fs-4  @error('duree')is-invalid  @enderror"
                             id="duree" placeholder="duree..." value="{{ old('duree', $eval->duree) }}"
                             name="duree">
+                            <select name="duree" id="duree" >
+                                <option value="5">5 min</option>
+                                <option value="10">10 min</option>
+                                <option value="15">15 min</option>
+                                <option value="30">30 min</option>
+                            </select>
                         @error('duree')
                             <label for="duree" class="text-danger">{{ $message }}</label>
                         @enderror
@@ -51,7 +57,7 @@
                 </div>
             </div>
             <button class="btn btn-primary ms-3 ">{{ $eval->id ? 'Mettre a jour' : 'Creer' }}</button>
-            <a class="btn btn-info" href="/admin">retour</a>
+            <a class="btn btn-info" onclick="history.back()">retour</a>
         </form>
     </div>
 </x-admin>

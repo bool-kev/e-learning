@@ -110,7 +110,7 @@
                 </div>
             </div>
             <button class="btn btn-primary ms-3 ">{{ $cours->id ? 'Mettre a jour' : 'Creer' }}</button>
-            <a class="btn btn-info" href="/admin">retour</a>
+            <a class="btn btn-info" onclick="history.back()">retour</a>
             @vite('resources/backend/js/htmx.min.js')
         </form>
     </div>

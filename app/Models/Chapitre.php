@@ -18,6 +18,6 @@ class Chapitre extends Model
     }
 
     public function matiere(){
-        return $this->belongsTo(Matiere::class);
+        return $this->belongsTo(Matiere::class,'matiere_id');
     }
 }

@@ -36,11 +36,9 @@ class AdminController extends Controller
         $data=$request->validate([
             'email'=>['required','email'],
             'password'=>'required',
-            'remember'=>['nullable']
             ]
         );
-        $remember=$data['remember']??false;
-        unset($data['remember']);
+        $remember=$request->boolean('remember',false);
         $data['statut']='admin';
         $route=session('target')??route('admin.root');
         Session::forget('target');

@@ -1,10 +1,9 @@
 <x-admin  :matiere="$matiere">
-    {{-- @dd($cours->files->count()) --}}
     <div class="container">
         <x-session type="danger" key="error"></x-session>
         <x-session type="success" key="success"></x-session>
         <div id="cover2"></div>
-        <h1 class="diplay-3 my-4">{{ $cours->id ? 'Modifier le chapitre' : 'Enregistrer un nouvel chapitre' }}</h1>
+        <h1 class="diplay-3 my-4">{{ $cours->id ? 'Modifier le cours' : 'Enregistrer un nouveau cours' }}</h1>
         <form action="" method="post" class="" id="form" enctype="multipart/form-data">
             @csrf
             <div class="row">
@@ -17,7 +16,6 @@
                             <label for="titre" class="text-danger">{{ $message }}</label>
                         @enderror
                     </div>
-
                     <div class="form-group mt-3">
                         <label for="description" class="form-label text-black">Description du cours</label>
                         <textarea class="form-control  @error('description')is-invalid  @enderror" id="description"
@@ -26,7 +24,7 @@
                             <label for="description" class="text-danger">{{ $message }}</label>
                         @enderror
                     </div>
-                    <div class="form-group">
+                    <div class="form-group my-3">
                         <!-- Include stylesheet -->
                         {{-- <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" /> --}}
                         @vite('resources/backend/css/quill.snow.css')
@@ -139,8 +137,8 @@
                             <img src="{{ $cours->getCover() }}" alt="" class="img-card mb-1"
                                 style="width: 100%;height: 100px; object-fit: cover">
                             <button class="btn btn-danger w-100"
-                                hx-post="{{ route('admin.cours.cover.delete', $cours) }}" hx-swap="outerHTML"
-                                hx-target="#cover2">Supprimer</button>
+                                hx-post="{{ route('admin.cours.cover.delete', $cours) }}" 
+                                hx-target="#cover2" hx-swap="afterend">Supprimer</button>
                         </div>
                     @endif
                     <div class="form-group my-2">
@@ -176,7 +174,7 @@
                 </div>
             </div>
             <button class="btn btn-primary ms-3 ">{{ $cours->id ? 'Mettre a jour' : 'Creer' }}</button>
-            <a class="btn btn-info" href="/admin">retour</a>
+            <a class="btn btn-info" onclick="history.back()">retour</a>
             @vite('resources/backend/js/htmx.min.js')
         </form>
     </div>

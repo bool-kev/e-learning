@@ -14,7 +14,7 @@
                 @enderror
             </div> 
             <button class="btn btn-primary ms-3 ">{{$chap->id?'Mettre a jour':'Creer'}}</button>
-            <a class="btn btn-info" href="/admin">retour</a>
+            <a class="btn btn-info" onclick="history.back()">retour</a>
         </form>
     </div>
 </x-admin>

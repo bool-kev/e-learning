@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Fichier extends Model
 {
@@ -28,5 +29,14 @@ class Fichier extends Model
             return $this->getUrl();
         }elseif($this->type=="application/pdf") return Storage::url('Preview/text2.png');
         else return Storage::url('Preview/video.png');
+    }
+
+    public function is_type(string $type)
+    {
+        return Str::startsWith($this->type, $type);
+    }
+    
+    public function commentaires(){
+        return $this->hasMany(Commentaire::class);
     }
 }

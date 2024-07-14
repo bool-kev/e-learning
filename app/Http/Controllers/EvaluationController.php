@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EvalFormRequest;
 use App\Models\Evaluation;
 use App\Models\Matiere;
+use App\Models\Note;
 use Illuminate\Http\Request;
 
 class EvaluationController extends Controller
@@ -12,9 +13,10 @@ class EvaluationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Matiere $matiere)
     {
-        //
+        $matiere->load('evaluations.questions');
+        return view('frontend.eval.index', ['matiere'=> $matiere]);
     }
 
     /**
@@ -72,5 +74,19 @@ class EvaluationController extends Controller
     {
         $eval->delete();
         return back()->with('success','l\'evaluation a ete supprimer');
+    }
+
+    public function submit(Request $request, Evaluation $eval){
+        $eval->load('questions');
+        $reponses=$request->input('question',[]);
+        $note=0;
+        foreach($reponses as $question_id=>$reponse){
+           if($eval->questions->find($question_id)?->reponse===$reponse) $note++;
+        }
+        $user=$request->user()->eleve;
+        // $user->notes()->attach($eval->id,['note'=>$note]);
+        // dd($reponses);
+        return back();
+
     }
 }

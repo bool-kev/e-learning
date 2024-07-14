@@ -29,7 +29,7 @@ class CoursFormRequest extends FormRequest
             'content'=>['required','string'],
             'cover'=>['image','max:2048'],
             'files'=>['array','max:5'],
-            'files.*'=>['file','mimes:pdf,mp4,avi,webp,png,jpg','max:10240']
+            'files.*'=>['file','mimes:pdf,mp4,avi,webp,png,jpg','max:102400']
         ];
     }
 

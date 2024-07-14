@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CoursFormRequest;
-use App\Models\Chapitre;
 use App\Models\Cours;
 use App\Models\Faculte;
 use App\Models\Fichier;
+use App\Models\Matiere;
+use App\Models\Chapitre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CoursFormRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class CoursController extends Controller
 {
@@ -46,6 +48,23 @@ class CoursController extends Controller
         return view("admin.cours.index", compact('chapitre'));
     }
 
+     /**
+     * Display a listing of the resource.
+     */
+    public function rootListing(Request $request)
+    {
+        $matiere=$request->user()->eleve->niveau->test->first()->load('chapitres');
+        $chapitre=$matiere->chapitres->first();
+        return redirect()->route('user.cours.list',['matiere'=>$matiere,'chapitre'=>$chapitre]);
+    }
+
+    public function listing(Request $request,Matiere $matiere,Chapitre $chapitre)
+    {
+        if($matiere->id!==$chapitre->matiere->id) throw new NotFoundResourceException('cours non trouve',404);
+        $chapitre->load(['matiere.faculte','cours']);
+        return view('frontend.cours.index',['chapitre'=>$chapitre]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -64,6 +83,7 @@ class CoursController extends Controller
         $data=$this->extractData($request);
         $data['chapitre_id']=$chapitre->id;
         $data['user_id']=Auth::user()->id;
+        if(Cours::where('titre',$data['titre'])->where('chapitre_id',$chapitre->id)->exists()) return back()->withErrors('titre','le titre du cours doit unique dans le meme chapitre');
         $cours=Cours::create($data);
         if($data['files']??false) $this->storeFiles($data['files'],$cours);
         return back()->with('success','cours ajoute avec success');
@@ -72,10 +92,10 @@ class CoursController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request,Cours $cours)
     {
-        dd('show');
-
+        $cours->load('files','commentaires.reponses','chapitre');
+        return view('frontend.cours.show',['cours'=>$cours]);
     }
 
     /**
@@ -94,7 +114,7 @@ class CoursController extends Controller
     public function update(CoursFormRequest $request, Cours $cours)
     {
         $data=$this->extractData($request);
-        dd($data['content']);
+        if(Cours::where('titre',$data['titre'])->where('id','!=',$cours->id)->where('chapitre_id',$cours->chapitre->id)->exists()) return back()->withErrors('titre','le titre du chapitre doit unique dans la matiere');
         if($data['cover']??false and $cours->cover) Storage::disk('public')->delete($cours->cover);
         if($data['files']??false) $this->storeFiles($data['files'],$cours);
         $cours->update($data);
@@ -124,6 +144,7 @@ class CoursController extends Controller
                 }, 5000);
                 document.getElementById('card')?.remove();
             </script>
+            <div id="cover2"></div>
         PHP;
     }
 
@@ -142,6 +163,7 @@ class CoursController extends Controller
                 }, 5000);
                 document.getElementById('file-$file->id')?.remove();
             </script>
+            <div id="cover2"></div>
         PHP;
     }
 }

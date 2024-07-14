@@ -33,6 +33,7 @@ class ChapitreController extends Controller
         $data=$request->validate([
             'titre'=>['string','required','min:2']
         ]);
+        if(Chapitre::where('titre',$data['titre'])->where('matiere_id',$matiere->id)->exists()) return back()->withErrors(['titre'=>'le titre du chapitre doit unique dans la matiere']);
         Chapitre::create([
             'titre'=> strtolower($data['titre']),
             'matiere_id'=>$matiere->id
@@ -65,6 +66,7 @@ class ChapitreController extends Controller
         $data=$request->validate([
             'titre'=>['required','min:2','string']
         ]);
+        if(Chapitre::where('titre',$data['titre'])->where('id','!=',$chapitre->id)->where('matiere_id',$chapitre->matiere->id)->exists()) return back()->withErrors('titre','le titre du chapitre doit unique dans la matiere');
         $chapitre->update($data);
         return back()->with('success','chapitre modifier');
     }

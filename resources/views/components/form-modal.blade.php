@@ -7,15 +7,17 @@
     <div class="row p-2">
         <h3 class="display-5 text-center">Question #{{$placeholder}} </h3>
         <div class="form-group">
-            <input type="text" class="form-control py-4 fs-4 text-black @error('enonce')is-invalid  @enderror"
+            <label for="enonce" class="form-label">enonce de la question</label>
+            <input type="text" class="form-control text-black @error('enonce')is-invalid  @enderror"
                 id="enonce" placeholder="enonce" value="{{ old('enonce',$question->enonce) }}"
                 name="enonce" required>
             @error('enonce')
                 <label for="enonce" class="text-danger">{{ $message }}</label>
             @enderror
         </div>
-        <div class="form-group">
-            <input type="text" class="form-control py-4 fs-4 text-black @error('reponse')is-invalid  @enderror"
+        <div class="form-group mt-3">
+            <label for="reponse" class="form-label">la reponse</label>
+            <input type="text" class="form-control text-black @error('reponse')is-invalid  @enderror"
                 id="reponse" placeholder="Reponse" value="{{ old('reponse', $question->reponse) }}"
                 name="reponse" required>
             @error('reponse')
@@ -23,14 +25,14 @@
             @enderror
         </div>
         <div id="options-container" class="row">
-        <hr>
-        <p class="text-secondary">Options de reponses pour les QCM ( <strong>le reponse est la premiere option </strong>)</p>
-        @error('options')
-            <label for="#" class="text-danger">{{ $message }}</label>
-        @enderror
-        @error('options.*')
-            <label for="#" class="text-danger">{{ $message }}</label>
-        @enderror
+            <hr>
+            <p class="text-secondary">Options de reponses pour les QCM ( <strong>le reponse est la premiere option </strong>)</p>
+            @error('options')
+                <label for="#" class="text-danger">{{ $message }}</label>
+            @enderror
+            @error('options.*')
+                <label for="#" class="text-danger">{{ $message }}</label>
+            @enderror
         </div>
     </div>
     
