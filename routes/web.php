@@ -49,7 +49,7 @@ Route::prefix('user/')->controller(EleveController::class)->middleware('eleve','
     Route::prefix('cours/')->controller(CoursController::class)->name('cours.')->group(function(){
         Route::get('','rootListing')->name('root');
         Route::get('show/{cours}/','show')->name('show');
-        Route::post('comment/store',[CommentaireController::class,'store'])->name('comment.store');
+        Route::post('comment/store',[CommentaireController::class,'store'])->withoutMiddleware(['eleve','safe'])->middleware('auth')->name('comment.store');
         Route::get('{chapitre}/','listing')->name('list');
     });
     Route::prefix('evaluation/')->controller(EvaluationController::class)->name('eval.')->group(function(){
@@ -85,6 +85,7 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->mid
         Route::delete('destroy/{cours}/','destroy')->name('delete');
         Route::post('removeCover/{cours}/','removeCover')->name('cover.delete');
         Route::post('removeFile/{file}/','removeFile')->name('file.delete');
+        Route::get('question/{cours}/','commentaires')->name('questions');
         Route::get('{slug}/{chapitre}/','index')->name('index');
     });
     Route::prefix('eval/')->controller(EvaluationController::class)->name('eval.')->group(function(){

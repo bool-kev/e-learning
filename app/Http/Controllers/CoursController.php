@@ -53,7 +53,7 @@ class CoursController extends Controller
      */
     public function rootListing(Request $request)
     {
-        $matiere=$request->user()->eleve->niveau->test->first()->load('chapitres');
+        $matiere=$request->user()->eleve->niveau->matieres->first()->load('chapitres');
         $chapitre=$matiere->chapitres->first();
         return redirect()->route('user.cours.list',$chapitre);
     }
@@ -95,6 +95,8 @@ class CoursController extends Controller
     public function show(Request $request,Cours $cours)
     {
         $cours->load('files','commentaires.reponses','chapitre');
+        $cours->vues+=1;
+        $cours->save();
         return view('frontend.cours.show',['cours'=>$cours]);
     }
 
@@ -165,5 +167,11 @@ class CoursController extends Controller
             </script>
             <div id="cover2"></div>
         PHP;
+    }
+
+    public function commentaires(Cours $cours)
+    {
+        $cours->load('files','commentaires.reponses','chapitre','commentaires.user');
+        return view('admin.cours.com',['cours'=>$cours]);
     }
 }

@@ -133,7 +133,7 @@
                             <form action="{{route('admin.chapitre.create',$matiere)}}" method="post">
                                 @csrf
                                 <div class="form-group col-md-10">
-                                    <input type="text" class="form-control fs-4 fw-bold fst-italic @error('titre')is-invalid  @enderror" id="titre"
+                                    <input type="text" class="form-control fs-4 fst-italic @error('titre')is-invalid  @enderror" id="titre"
                                         placeholder="intitule du chapitre" name="titre">
                                     @error('titre')
                                         <label for="titre" class="text-danger">{{ $message }}</label>

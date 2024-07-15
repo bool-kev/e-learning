@@ -17,5 +17,10 @@ class Commentaire extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function getUser(User $user)
+    {
+        return $user->id===$this->user->id?'moi':$this->user->full_name();
+    }
     
 }

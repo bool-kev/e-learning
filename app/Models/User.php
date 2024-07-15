@@ -69,6 +69,6 @@ class User extends Authenticatable
     }
 
     public function getAvatar(){
-        return $this->photo?Storage::url($this->photo):asset('images/about-img.jpg');
+        return $this->photo?Storage::url($this->photo):asset('images/avatar.png');
     }
 }

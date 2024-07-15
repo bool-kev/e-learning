@@ -10,15 +10,12 @@ class Niveau extends Model
     use HasFactory;
     protected $fillable=['libelle'];
     
-    public function matieres(){
-        return $this->BelongsToMany(Faculte::class,'matieres')->as('matiere')->using(Matiere::class)->withPivot('id');
-    }
     
     public function eleves(){
         return $this->hasMany(Eleve::class);
     }
 
-    public function test()
+    public function matieres()
     {
         return $this->hasMany(Matiere::class,'niveau_id')->whereHas('chapitres');
     }

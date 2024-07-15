@@ -207,6 +207,8 @@ class EleveController extends Controller
         {
             if($user=User::where('email',$row->email)->first()){
                 Auth::login($user);
+                session()->regenerate();
+                DB::table('password_reset_tokens')->where('email',$user->email)->delete();
                 return to_route('user.newPassword');
             }
         }

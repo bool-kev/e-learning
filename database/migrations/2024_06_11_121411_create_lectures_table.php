@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Cours::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Eleve::class)->constrained()->cascadeOnDelete();
-            $table->integer('nombre')->default(0);
             $table->timestamps();
         });
     }

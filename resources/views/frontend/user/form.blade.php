@@ -71,12 +71,12 @@
           <ul class="nav nav-pills d-inline-flex text-center">
             <li class="nav-item">
                 <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-1">
-                    <span class="text-dark" style="width: 130px;">Email</span>
+                    <span class="text-dark" style="width: 100px;">Email</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="d-flex py-2 m-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-2">
-                    <span class="text-dark" style="width: 130px;">Telephone</span>
+                    <span class="text-dark" style="width: 100px;">Telephone</span>
                 </a>
             </li>
             

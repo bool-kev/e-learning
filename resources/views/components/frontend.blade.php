@@ -1,7 +1,7 @@
 @props([
   'chapitre'=>new App\Models\Chapitre(),
   'matiere'=>"",
-  'facultes'=>request()->user()->eleve->niveau->test->load('chapitres','faculte'),
+  'facultes'=>request()->user()->eleve->niveau->matieres->load('chapitres','faculte'),
   'user'=>request()->user()
 ])
 @extends('base_bootstrap')
@@ -30,7 +30,6 @@
 
 @section('content')
 <body>
-
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -69,7 +68,7 @@
                           @endif
                         </div>
                       </li>
-                      <a class=" dropdown-toggle mt-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ $user->nom}}</a>
+                      <a class=" dropdown-toggle mt-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="d-none d-md-inline">{{ $user->nom}}</span></a>
                   <li class="nav-item dropdown">
                       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                           <li class="text-center">
@@ -108,7 +107,7 @@
       @foreach ($facultes as $faculte)
         <li class="nav-item @if($loop->first) active @endif ">
           <a class="nav-link collapsed bg-primary" data-bs-target="#components-nav-{{$faculte->id}}" data-bs-toggle="collapse" href="#">
-            <i class="bi bi-book-half text-light"></i><span @class(['text-light','active'=>$chapitre->matiere?->faculte->id===$faculte->faculte->id,'active'=>$matiere===$faculte->faculte->libelle])>{{$faculte->faculte->libelle}}</span><i class="bi bi-chevron-down ms-auto text-light"></i>
+            <i class="bi bi-book-half text-light"></i><span @class(['text-light','active'=>($chapitre->matiere?->faculte->id===$faculte->faculte->id)||($matiere===$faculte->faculte->libelle)])>{{$faculte->faculte->libelle}}</span><i class="bi bi-chevron-down ms-auto text-light"></i>
           </a>
           
           <ul id="components-nav-{{$faculte->id}}" @class(['nav-content collapse','show'=>$chapitre->matiere?->faculte->id===$faculte->faculte->id]) data-bs-parent="#sidebar-nav">
