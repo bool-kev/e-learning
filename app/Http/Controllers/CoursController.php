@@ -55,12 +55,12 @@ class CoursController extends Controller
     {
         $matiere=$request->user()->eleve->niveau->test->first()->load('chapitres');
         $chapitre=$matiere->chapitres->first();
-        return redirect()->route('user.cours.list',['matiere'=>$matiere,'chapitre'=>$chapitre]);
+        return redirect()->route('user.cours.list',$chapitre);
     }
 
-    public function listing(Request $request,Matiere $matiere,Chapitre $chapitre)
+    public function listing(Request $request,Chapitre $chapitre)
     {
-        if($matiere->id!==$chapitre->matiere->id) throw new NotFoundResourceException('cours non trouve',404);
+        // if($matiere->id!==$chapitre->matiere->id) throw new NotFoundResourceException('cours non trouve',404);
         $chapitre->load(['matiere.faculte','cours']);
         return view('frontend.cours.index',['chapitre'=>$chapitre]);
     }

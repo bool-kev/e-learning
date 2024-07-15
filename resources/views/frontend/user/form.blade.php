@@ -104,12 +104,13 @@
           <div class="checkbox mb-2">
             <input type="checkbox" id="remember" name="remember"/>
             <label for="remember" class="text-black">rester connecter</label>
-            <a href="#" class="ms-5">mot de passe oublie?</a>
+            <a href="#" class="ms-5" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  role="button">mot de passe oublie?</a>
 
           </div>
           <p class="text-center m-0 p-0">Vous etes nouveau ?<a class="text-primary" style="cursor: pointer" onclick="document.querySelector('.signup header').dispatchEvent(new Event('click'));">s'inscrire</a></p>
           <input type="submit" value="Login" class="m-0 p-0"/>
         </form>
+       
       </div>
 
       <script>
@@ -130,3 +131,27 @@
     </section>
     
 </x-root>
+ <!-- Modal -->
+ <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{route('user.request.send')}}" method="post">
+      @csrf
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Mot de passe oublie</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <input class="form-control" name="email" type="email" placeholder="email" required />
+            @error('email')
+                <label for="email" class="text-danger">{{$message}}</label>
+            @enderror
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">annuler</button>
+          <button type="submit" class="btn btn-primary">renitialiser</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div> 

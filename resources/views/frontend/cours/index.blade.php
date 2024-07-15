@@ -57,12 +57,12 @@
                                 <a href="{{ route('user.cours.show', $cour) }}" class="text-dark text-decoration-none text-decoration-underline">{{ $cour->titre }}</a>
                             </h5>
                             <p class="card-text" style="height:3rem;">
-                                <small class="text-muted">{{ Str::limit($cour->description,60) }}</small>
+                                <small class="text-muted">{{ Str::limit($cour->description,40) }}</small>
                             </p>
                             <hr>
                             <div class="mt-auto">
                                 <div class="d-flex justify-content-between">
-                                    <small class="text-muted">Publié le {{ $cour->created_at->diffForHumans() }}</small>
+                                    <small class="text-muted fst-italic fw-bold">{{ $cour->created_at->diffForHumans() }}</small>
                                     <small class="text-muted">{{ $cour->vues }} lecture(s)</small>
                                 </div>
                             </div>

@@ -25,6 +25,8 @@ Route::prefix('user/')->controller(EleveController::class)->middleware('eleve','
             Route::post('register/','register')->name('register');
             Route::get('login/','loginForm')->name('login.form');
             Route::post('login/','login')->name('login');
+            Route::post('forgotPassword/','sendRequest')->name('request.send');
+            Route::get('checkToken/{token}/','checkToken')->name('request.check');
         });
         Route::get('otp_verification/','otpCheckForm')->name('otp.form');
         Route::post('otp_verification/','otpCheck')->name('otp');
@@ -33,6 +35,7 @@ Route::prefix('user/')->controller(EleveController::class)->middleware('eleve','
         Route::post('pricing/','subscribe')->name('subscribe');
         Route::get('profile/edit/','profileEdit')->name('profile.edit');
         Route::post('profile/edit','profile')->name('profile.update');
+        Route::match(['get','post'],'newPassword/','newPassword')->name('newPassword');
     });
     
     Route::prefix('transaction/')->controller(TransactionController::class)->name('trans.')->group(function(){
@@ -47,7 +50,7 @@ Route::prefix('user/')->controller(EleveController::class)->middleware('eleve','
         Route::get('','rootListing')->name('root');
         Route::get('show/{cours}/','show')->name('show');
         Route::post('comment/store',[CommentaireController::class,'store'])->name('comment.store');
-        Route::get('/{matiere}/{chapitre}/','listing')->name('list');
+        Route::get('{chapitre}/','listing')->name('list');
     });
     Route::prefix('evaluation/')->controller(EvaluationController::class)->name('eval.')->group(function(){
         Route::post('submit/{eval}','submit')->name('submit');
@@ -126,28 +129,10 @@ Route::prefix('admin/')->name('admin.')->controller(AdminController::class)->mid
 
 });
 Route::get('/',function(){
-    Auth::logout();
     return view('frontend.user.home');
-});
+})->name('home');
 Route::get('enseignant/login/',[EnseignantController::class,'loginForm'])->name('login.form');
 Route::post('enseignant/login/',[EnseignantController::class,'login2'])->name('login');
 Route::post('logout/',[EleveController::class,'logout'])->middleware('auth')->name('logout');
-Route::get('cours/{cours}',function(Cours $cours){
-    $cours->load('files');
-    return view('cours',['cours'=>$cours]);
-})->name('cours');
 
-Route::get('test/{eval}',function(Evaluation $eval){
-    return view('test',['devoir'=>$eval]);
-})->name('test');
-Route::post('test/{eval}',function(Evaluation $eval,Request $request){
-    $eval->load('questions');
-    $reponses=$request->input('question');
-    $note=0;
-    foreach($reponses as $question_id=>$reponse){
-       if($eval->questions->find($question_id)?->reponse===$reponse) $note++;
-    }
-    $user=User::find(3)->eleve;
-    $user->notes()->attach($eval->id,['note'=>$note]);
-})->name('test2');
 

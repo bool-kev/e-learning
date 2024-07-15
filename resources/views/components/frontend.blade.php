@@ -1,5 +1,6 @@
 @props([
   'chapitre'=>new App\Models\Chapitre(),
+  'matiere'=>"",
   'facultes'=>request()->user()->eleve->niveau->test->load('chapitres','faculte'),
   'user'=>request()->user()
 ])
@@ -38,7 +39,7 @@
         <img src="assets/img/logo.png" alt="">
         
         
-        <span class="d-none d-lg-block">E-learning</span>
+        <span class="d-none d-lg-block">SENSEI SCHOOL</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn fs-3 text-black d-md-none"></i>
     </div><!-- End Logo -->
@@ -46,7 +47,7 @@
     <div class="col-6 display ">
       <ul class="nav nav-underline " >
         <li class="nav-item ">
-          <a class="nav-link text-black lnk " href="{{route('user.cours.root',$chapitre)}}">Cours</a>
+          <a class="nav-link text-black lnk " href="{{route('user.cours.root')}}">Cours</a>
         </li>
         <li class="nav-item link lnk  @if(! $chapitre->id)active @endif">
           <a class="nav-link text-black" href="@if($chapitre->id){{route('user.eval.index',$chapitre->matiere)}} @else # @endif">Evaluations</a>
@@ -71,17 +72,20 @@
                       <a class=" dropdown-toggle mt-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ $user->nom}}</a>
                   <li class="nav-item dropdown">
                       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                          <li>
+                          <li class="text-center">
                               <a href="{{route('user.profile.edit')}}" class="dropdown-item ">
                                   <i class="bi bi-person-fill text-primary"></i>
                                   Profil
                               </a>
                           </li>
                           <li>
-                              <a href="" class="dropdown-item ">
-                                  <i class="bi bi-box-arrow-left text-primary"></i>
-                                  Déconnexion
-                              </a>
+                              <form method="POST" class="dropdown-item " action="{{route('logout')}}">
+                                  @csrf
+                                  <button class="btn btn-d">
+                                    <i class="bi bi-box-arrow-left text-danger"></i>
+                                    Déconnexion
+                                  </button>
+                              </form>
                           </li>
                       </ul>
                   </li>
@@ -104,13 +108,13 @@
       @foreach ($facultes as $faculte)
         <li class="nav-item @if($loop->first) active @endif ">
           <a class="nav-link collapsed bg-primary" data-bs-target="#components-nav-{{$faculte->id}}" data-bs-toggle="collapse" href="#">
-            <i class="bi bi-book-half text-light"></i><span @class(['text-light','active'=>$chapitre->matiere?->faculte->id===$faculte->faculte->id])>{{$faculte->faculte->libelle}}</span><i class="bi bi-chevron-down ms-auto text-light"></i>
+            <i class="bi bi-book-half text-light"></i><span @class(['text-light','active'=>$chapitre->matiere?->faculte->id===$faculte->faculte->id,'active'=>$matiere===$faculte->faculte->libelle])>{{$faculte->faculte->libelle}}</span><i class="bi bi-chevron-down ms-auto text-light"></i>
           </a>
           
           <ul id="components-nav-{{$faculte->id}}" @class(['nav-content collapse','show'=>$chapitre->matiere?->faculte->id===$faculte->faculte->id]) data-bs-parent="#sidebar-nav">
             <li>
               @foreach ($faculte->chapitres as $chap )
-                <a href="{{route('user.cours.list',['matiere'=>$faculte,'chapitre'=>$chap])}}">
+                <a href="{{route('user.cours.list',$chap)}}">
                   <i class="bi bi-chat-dots-fill text-light"></i><span @class([ 'text-light','active'=>$chapitre->id===$chap->id])>{{ $chap->titre }}</span>
                 </a>
               @endforeach

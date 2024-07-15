@@ -1,4 +1,4 @@
-<x-frontend  >
+<x-frontend  :matiere="$eval->matiere->faculte->libelle">
     <style>
         .anim {
             transition: transform 0.5s, box-shadow 2s;

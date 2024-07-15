@@ -1,4 +1,4 @@
-<x-frontend  >
+<x-frontend :matiere="$matiere->faculte->libelle" >
     @php
         $eleve=request()->user()->eleve->load('notes');
     @endphp
@@ -36,13 +36,13 @@
                             {{ $devoir->intitule }}
                     </div>
                     <div class="card-body">
-                        <p>Date: {{ $devoir->date }}</p>
-                        <p>Durée: {{ $devoir->duree }}</p>
+                        <p>Date: {{ $devoir->date}}</p>
                         @if ($eleve->is_composer($devoir))
                             <p class="fst-italic">Votre note  <span class="fw-bold">{{$eleve->is_composer($devoir)->note}}/{{$devoir->questions->count()}}</span></p>
                             <a href="{{route('user.eval.solution',$devoir)}}" class="btn btn-primary">Correction</a>
                             <p class="text-secondary float-end">Deja composer </p>
                         @else
+                            <p>Durée: {{ $devoir->duree }}</p>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#questionsModal{{$devoir->id}}">
                                 Composer
                             </button>

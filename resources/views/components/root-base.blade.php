@@ -25,16 +25,14 @@
         <div class="hero-container">
           <div data-aos="fade-in">
             <div class="hero-logo">
-              {{-- <img class="" src="{{asset('images/logo.png')}}" alt="Imperial"> --}}
-              <h1 class="logo mr-auto"><a href="index.html">SENSEI Learning</a></h1> 
-
+              <h1 class="logo mr-auto">SENSEI Learning</h1> 
             </div>
     
             <p>Bienvenu sur notre plateforme e-school</p>
             <h2>Vous etes? <span class="typed" data-typed-items="beautiful graphics, functional websites, working mobile apps"></span></h2>
             <div class="actions">
-              <a href="#about" class="btn-get-started">enseignant</a>
-              <a href="{{route('user.login.form')}}" class="btn-services">eleve</a>
+              <a href="{{route('admin.enseignant.login')}}" class="btn-services">enseignant</a>
+              <a href="{{route('user.login.form')}}" class="btn-get-started">eleve</a>
             </div>
           </div>
         </div>
@@ -44,14 +42,10 @@
     <!-- ======= Header ======= -->
     <header id="header" class="d-flex align-items-center">
       <div class="container d-flex align-items-center justify-content-between">
-  
-        {{-- <a href="index.html" class="logo mr-auto"><img src="{{asset('images/logo.png')}}" alt=""></a> --}}
-        <!-- Uncomment below if you prefer to use a text logo -->
         <h1 class="logo mr-auto"><a href="index.html">SENSEI Learning</a></h1> 
-  
         <nav id="navbar" class="navbar">
           <ul>
-            <li><a class="nav-link scrollto active" href="#hero">Acceuil</a></li>
+            <li><a class="nav-link scrollto active" href="/">Acceuil</a></li>
             <li><a class="nav-link scrollto" href="#about">A propos</a></li>
             
             <li><a class="nav-link scrollto" href="#contact">Contactez nous</a></li>
@@ -73,15 +67,9 @@
         <div class="row">
           <div class="col-md-12">
             <div class="copyright">
-              &copy; Copyright <strong>Imperial Theme</strong>. All Rights Reserved
+              &copy; Copyright <strong>ESI 2024</strong>. All Rights Reserved
             </div>
             <div class="credits">
-              <!--
-              All the links in the footer should remain intact.
-              You can delete the links only if you purchased the pro version.
-              Licensing information: https://bootstrapmade.com/license/
-              Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Imperial
-            -->
               Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
             </div>
           </div>

@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\EmailCheckEvent;
-use App\Http\Requests\EleveFormRequest;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Eleve;
 use App\Models\Niveau;
 use App\Models\Transaction;
-use App\Models\User;
-use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Events\EmailCheckEvent;
+use App\Mail\PasswordResetMail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\EleveFormRequest;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -141,9 +146,9 @@ class EleveController extends Controller
         return to_route('admin.eleve.index')->with('success','compte eleve supprimer avec success');
     }
 
-    public function logout(User $user){
+    public function logout(){
         Auth::logout();
-        return to_route('user.login.form')->with('info','vous avez ete deconnecter');
+        return to_route('home')->with('info','vous avez ete deconnecter');
     }
 
     public function profileEdit()
@@ -175,6 +180,50 @@ class EleveController extends Controller
         $user->update($data);
         return back()->with('success','Profils mis a jour');
 
+    }
+
+    //password reset
+    public function sendRequest(Request $request)
+    {
+        $data=$request->validate([
+            'email'=>['required','email','max:240']
+        ]);
+        if($user=User::where('email',$data['email'])->first())
+        {
+            $token=Str::random(64);
+            DB::table('password_reset_tokens')->upsert([
+                'email'=> $data['email'],
+                'token'=> $token,
+                'created_at'=>Carbon::now()
+            ],['email'],['token','created_at']);
+            Mail::to($data['email'])->send(new PasswordResetMail($token,$user));
+        }
+        return back()->with('success','un email de renitialisation vous a ete envoye');
+    }
+
+    public function checkToken(string $token)
+    {
+        if($row=DB::table('password_reset_tokens')->where('token',$token)->first())
+        {
+            if($user=User::where('email',$row->email)->first()){
+                Auth::login($user);
+                return to_route('user.newPassword');
+            }
+        }
+        return back()->with('error','le token est invalide');
+    }
+
+    public function newPassword(Request $request)
+    {
+        if($request->isMethod('POST')){
+            $user=$request->user();
+            $data=$request->validate([
+                'password'=>['required','min:4','confirmed']
+            ]);
+            $user->update($data);
+            return to_route('user.cours.root');
+        }
+        return view('frontend.user.newPassword');
     }
 
     public function pricing()

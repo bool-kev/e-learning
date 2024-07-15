@@ -213,6 +213,9 @@
                                 <div class="mt-5 text-center">
                                     <button class="btn btn-primary profile-button" type="submit">Mettre a jour</button>
                                 </div>
+                                <div class=" text-center">
+                                    <a class="btn btn-secondary mt-2" href="{{route('user.cours.root')}}">quitter</a>
+                                </div>
                             </form>
                         </div>
                     </div>

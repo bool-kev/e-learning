@@ -16,13 +16,12 @@
 
         {{-- <a href="index.html" class="logo mr-auto"><img src="assets/img/logo.png" alt=""></a> --}}
         <!-- Uncomment below if you prefer to use a text logo -->
-        <h1 class="logo mr-auto"><a href="index.html">Imperial</a></h1>
+        <h1 class="logo mr-auto"><a href="/">SENSEI E-SCHOOl</a></h1>
 
         <nav id="navbar" class="navbar">
           <ul>
-            <li><a class="nav-link scrollto " href="#hero">Home</a></li>
+            <li><a class="nav-link scrollto " href="/">Home</a></li>
             <li><a class="nav-link scrollto" href="#about">About</a></li>
-            <li><a class="nav-link scrollto" href="#services">Services</a></li>
             <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           </ul>
           <i class="bi bi-list mobile-nav-toggle"></i>
@@ -33,14 +32,6 @@
 
     <main id="main">
 
-      {{-- <!-- ======= Breadcrumbs ======= -->
-      <section class="breadcrumbs">
-        <div class="container">
-
-          
-
-        </div>
-      </section><!-- End Breadcrumbs --> --}}
 
       <section class="inner-page">
         <div class="container d-flex justify-content-center p-3">
@@ -56,16 +47,10 @@
         <div class="row">
           <div class="col-md-12">
             <div class="copyright">
-              &copy; Copyright <strong>Imperial Theme</strong>. All Rights Reserved
+              &copy; Copyright <strong>ESI 2024</strong>. All Rights Reserved
             </div>
             <div class="credits">
-              <!--
-              All the links in the footer should remain intact.
-              You can delete the links only if you purchased the pro version.
-              Licensing information: https://bootstrapmade.com/license/
-              Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Imperial
-            -->
-              Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+              
             </div>
           </div>
         </div>

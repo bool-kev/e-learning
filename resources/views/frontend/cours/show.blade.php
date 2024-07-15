@@ -1,13 +1,10 @@
 <x-frontend  :chapitre="$cours->chapitre">
-@section('style')
 <style>
     #the-canvas {
         border: 1px solid black;
         direction: ltr;
     }
-</style>
 
-    <style>
     .rounded-pill.active{
         background-color: #4070f4 !important;
     }
@@ -50,7 +47,7 @@
 </style>
  
 
-<!-- Single Page Header start -->
+
 <div class="container-fluid page-header py-5">
     <h1 class="text-center text-white display-6">{{$cours->titre}}</h1>
     <ol class="breadcrumb justify-content-center mb-0">
@@ -59,8 +56,8 @@
         <li class="breadcrumb-item text-white">Shop Detail</li>
     </ol>
 </div>
-<!-- Single Page Header End -->
-    <div class="container" >
+
+<div class="container" >
             
     <p class="my-3 border border-2">
         {!! $cours->content !!}
@@ -71,8 +68,7 @@
         <div class="col-lg-8">
             <ul class="nav nav-pills d-inline-flex text-center mb-1 ">
                 <li class="nav-item">
-                    <a class="d-flex m-2 py-2 bg-light rounded-pill link-underline link-underline-opacity-0 @if( request()->tab!=='eval')active @endif"
-                        data-bs-toggle="pill" href="#tab-1">
+                    <a class="d-flex m-2 py-2 bg-light rounded-pill link-underline link-underline-opacity-0"  data-bs-toggle="pill" href="#tab-1">
                         <span class="text-dark" style="width: 130px;">images</span>
                     </a>
                 </li>
@@ -81,11 +77,7 @@
                         data-bs-toggle="pill" href="#tab-2">
                         <span class="text-dark" style="width: 130px;" id="eval">videos</span>
                     </a>
-                    <script>
-                        document.getElementById('eval').addEventListener('click',(e)=>{
-                            
-                        })
-                    </script>
+                    
                 </li>
                 <li class="nav-item">
                     <a class="d-flex m-2 py-2 bg-light rounded-pill link-underline link-underline-opacity-0"
@@ -132,7 +124,7 @@
                     </button>
                 </div>
             @else
-                <h3>Aucune images</h3>
+                <p>Aucune images</p>
             @endif
         </div>
         <div id="tab-2" class="tab-pane fade p-0">
@@ -142,7 +134,7 @@
                     </video>
                 </div>
             @empty
-                <h1>Aucune videos associee</h1>
+                <p>Aucune videos associee</p>
             @endforelse
         </div>
         <div id="tab-3" class="tab-pane fade p-0">
@@ -175,7 +167,7 @@
                     })
                 </script>
             @empty
-                <h1>Aucun pdf</h1>
+                <p>Aucun pdf</p>
             @endforelse
         </div>
         <div id="tab-4" class="tab-pane fade p-0">
@@ -201,7 +193,7 @@
                                       <p class="mb-1">
                                         {{ $comment->user->full_name() }} - <span class="small d-block d-md-inline fst-italic"> {{$comment->updated_at->diffForHumans() }}</span>
                                       </p>
-                                      <a href="#!"><i class="fas fa-reply fa-xs"></i><span class="small" id="send-{{ $comment->id }}"> repondre</span></a>
+                                      <a href="#"><i class="fas fa-reply fa-xs"></i><span class="small" id="send-{{ $comment->id }}"> repondre</span></a>
                                       <script>
                                           document.getElementById("send-{{ $comment->id }}").addEventListener('click',(e)=>{
                                               let alert=document.getElementById("alert")
