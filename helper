@@ -1,0 +1,5 @@
+#!/bin/bash
+npm run dev >~/Bureau/key/vite.log 2>&1 &
+./MailHog_linux_amd64 >~/Bureau/key/mailhog.log 2>&1 &
+php artisan serve --host=0.0.0.0 &
+server &
