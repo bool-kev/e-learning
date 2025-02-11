@@ -12,7 +12,7 @@
 
     Ceci est un projet de e-learning proposant des inscriptions dans differentes classes pour un apprentissage pointu et continu.
 
-##Fonctionnalites principales
+## Fonctionnalites principales
     -Inscription et paiement via ligdicash
     -exploration des cours avec la possibilites de telecharger les ressources
     -Ajout de commentaire ou poser une question au responsable du cours
